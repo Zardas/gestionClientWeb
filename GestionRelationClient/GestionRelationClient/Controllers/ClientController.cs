@@ -12,12 +12,11 @@ namespace GestionRelationClient.Controllers
     public class ClientController : Controller
     {
 
-        Models.GestionRelationClient_DBContext DBContext;
-        private DbSet<Utilisateur> test;
+        private readonly GestionRelationClient_DBContext _context;
 
-        public ClientController()
+        public ClientController(GestionRelationClient_DBContext context)
         {
-            this.DBContext = new Models.GestionRelationClient_DBContext();
+            _context = context;
         }
 
         [HttpGet]
@@ -36,7 +35,7 @@ namespace GestionRelationClient.Controllers
                 new Models.Client() { Nom = "Billy", Prenom = "TheKid" },
                 new Models.Client() { Nom = "General", Prenom = "Draven" }
             };*/
-            return View(DBContext.Utilisateurs.ToList());
+            return View(_context.Roles.ToList());
         }
     }
 }

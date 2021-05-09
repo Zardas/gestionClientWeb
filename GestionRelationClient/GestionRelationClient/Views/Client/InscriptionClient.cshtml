@@ -12,9 +12,9 @@
 
 <p>Liste temporaire à supprimer</p>
 
-@model List<GestionRelationClient.Models.Utilisateur>
-@foreach(GestionRelationClient.Models.Utilisateur client in Model)
+@model List<GestionRelationClient.Models.Role>
+@foreach(GestionRelationClient.Models.Role role in Model)
 {
-    <partial name="_Client" model=client />
+    <partial name="_Role" model=role />
      
 }

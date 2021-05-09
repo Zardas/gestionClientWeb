@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionRelationClient
 {
@@ -23,6 +24,8 @@ namespace GestionRelationClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(option => option.EnableEndpointRouting = false);
+            services.AddDbContext<Models.GestionRelationClient_DBContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            // DefaultConnection est indiquée dans appsettings.json
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
