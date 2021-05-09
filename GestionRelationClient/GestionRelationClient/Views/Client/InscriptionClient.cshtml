@@ -1,0 +1,20 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Inscription client";
+}
+
+<h1>Inscription</h1>
+
+<p>Liste temporaire à supprimer</p>
+
+@model List<GestionRelationClient.Models.Utilisateur>
+@foreach(GestionRelationClient.Models.Utilisateur client in Model)
+{
+    <partial name="_Client" model=client />
+     
+}
