@@ -22,20 +22,26 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult ConnectClient()
         {
+            return View(_context.Roles.ToList());
+        }
+
+        [HttpPost]
+        public IActionResult InscriptionClient(Models.Role role)
+        {
+            if(ModelState.IsValid)
+            {
+                _context.Roles.Add(role);
+                _context.SaveChanges();
+                return RedirectToAction("ConnectClient");
+            }
+
             return View();
         }
 
         [HttpGet]
         public IActionResult InscriptionClient()
         {
-            //ObservableCollection<Models.Utilisateur> clients = Models.Utilitaire.ToObservableCollection<Models.Utilisateur>(this.DBContext.Utilisateurs);
-
-            /*List<Models.Client> clients = new List<Models.Client>()
-            {
-                new Models.Client() { Nom = "Billy", Prenom = "TheKid" },
-                new Models.Client() { Nom = "General", Prenom = "Draven" }
-            };*/
-            return View(_context.Roles.ToList());
+            return View();
         }
     }
 }

@@ -12,9 +12,18 @@
 
 <p>Liste temporaire à supprimer</p>
 
-@model List<GestionRelationClient.Models.Role>
-@foreach(GestionRelationClient.Models.Role role in Model)
-{
-    <partial name="_Role" model=role />
-     
-}
+<h3>Ajout Role</h3>
+
+@model GestionRelationClient.Models.Role
+<form asp-action="InscriptionClient">
+    <div class="form-group">
+        <label asp-for="Title">Titre</label>
+        <input type="text" asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Ajouter un rôle</button>
+</form>
+
+<a class="btn btn-primary" href="../Views/Client/ConnectClient.cshtml" role="button">Retour</a>
+
+

@@ -11,8 +11,12 @@ namespace GestionRelationClient.Models
         //[DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UtilisateurId { get; set; }
 
+        [Required(ErrorMessage = "Login requis !")]
         public String Login { get; set; }
+
+        [Required(ErrorMessage = "Mot de passe requis !")]
         public String MotDePasse { get; set; }
+
         public String LoginStatus { get; set; }
 
 
