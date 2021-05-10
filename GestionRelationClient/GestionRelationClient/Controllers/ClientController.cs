@@ -22,15 +22,16 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult ConnectClient()
         {
-            return View(_context.Roles.ToList());
+            return View(_context.Clients.ToList());
         }
 
         [HttpPost]
-        public IActionResult InscriptionClient(Models.Role role)
+        public IActionResult InscriptionClient(Models.Client client)
         {
             if(ModelState.IsValid)
             {
-                _context.Roles.Add(role);
+                client.LoginStatus = "offline";
+                _context.Clients.Add(client);
                 _context.SaveChanges();
                 return RedirectToAction("ConnectClient");
             }

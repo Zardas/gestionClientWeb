@@ -9,12 +9,25 @@
     <head>
         <meta charset="utf-8" />
         <link href="~/css/site.min.css" rel="stylesheet" />
+        <link href="~/css/custom.css" rel="stylesheet" />
         <script src="~/js/site.min.js"></script>
         <title>@ViewBag.Title</title>
     </head>
 
     <body>
-        <h1>@ViewBag.Title page</h1>
+
+        <!-- HEADER -->
+        <nav>
+            <div class="acceuil">
+                <a class="menuLink" href="#">Accueil</a>    
+            </div>
+            <div class="menu">
+                <a class="menuLink" href="#">Client</a>
+                <a class="menuLink" href="#">Gestionnaire</a>
+            </div>
+        </nav>
+
+        <h1>@ViewBag.Title</h1>
 
         @RenderBody()
     </body>

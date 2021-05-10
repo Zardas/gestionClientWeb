@@ -7,11 +7,12 @@
     ViewBag.Title = "Connexion client";
 }
 
-<h1>Hello World</h1>
 
-@model List<GestionRelationClient.Models.Role>
-@foreach (GestionRelationClient.Models.Role role in Model)
+
+@model List<GestionRelationClient.Models.Client>
+@foreach (GestionRelationClient.Models.Client client in Model)
 {
-    <partial name="_Role" model=role />
-
+    <partial name="_Client" model=client />
 }
+
+<a class="btn btn-link" asp-action="InscriptionClient" role="button">Pas encore inscrit ?</a>
