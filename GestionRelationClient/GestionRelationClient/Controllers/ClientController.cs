@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore;
 using GestionRelationClient.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 
 namespace GestionRelationClient.Controllers
 {
@@ -22,25 +24,61 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult ConnectClient()
         {
-            return View(_context.Clients.ToList());
+            return View();
         }
 
         [HttpPost]
-        public IActionResult InscriptionClient(Models.Client client)
+        public IActionResult ConnectClient(Client client)
         {
-            if(ModelState.IsValid)
+
+            Client clientATrouver = _context.Clients.Where(c => (c.Login.Equals(client.Login) && c.MotDePasse.Equals(Utilitaire.HashPassword(client.MotDePasse)))).FirstOrDefault();
+
+            if (clientATrouver != null)
             {
-                client.LoginStatus = "offline";
-                _context.Clients.Add(client);
+                Debug.WriteLine("Client connu :)");
+                clientATrouver.SeConnecter();
                 _context.SaveChanges();
-                return RedirectToAction("ConnectClient");
+                return RedirectToAction("ListeComptesClient");
             }
 
             return View();
         }
 
+
+
+
+
+
+
+
+
+
+
         [HttpGet]
         public IActionResult InscriptionClient()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult InscriptionClient(Client client)
+        {
+            if(ModelState.IsValid)
+            {
+                client.Inscrire(client.MotDePasse);
+                _context.Clients.Add(client);
+                _context.SaveChanges();
+                return RedirectToAction("InscriptionClient");
+            }
+
+            return View();
+        }
+
+        
+
+
+        [HttpGet]
+        public IActionResult ListeComptesClient()
         {
             return View();
         }

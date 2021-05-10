@@ -33,16 +33,18 @@ namespace GestionRelationClient.Models
             this.Comptes = new List<Compte>();
         }
 
+
         // TODO ?
         public void SeConnecter()
         {
-
+            this.LoginStatus = "online";
         }
 
         // TODO ?
-        public void Inscrire()
+        public void Inscrire(string password)
         {
-
+            this.LoginStatus = "offline";
+            MotDePasse = Utilitaire.HashPassword(password);
         }
 
         // TODO ?
