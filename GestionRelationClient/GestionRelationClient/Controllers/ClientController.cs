@@ -22,6 +22,9 @@ namespace GestionRelationClient.Controllers
             _context = context;
         }
 
+
+
+        /* -------- ConnectClient -------- */
         [HttpGet]
         public IActionResult ConnectClient()
         {
@@ -58,7 +61,7 @@ namespace GestionRelationClient.Controllers
 
 
 
-
+        /* -------- InscriptionClient -------- */
         [HttpGet]
         public IActionResult InscriptionClient()
         {
@@ -79,47 +82,83 @@ namespace GestionRelationClient.Controllers
             return View();
         }
 
-        
 
+
+
+
+
+        /* -------- ListeComptesClient -------- */
 
         [HttpGet]
         public IActionResult ListeComptesClient(Client client)
         {
-            Debug.WriteLine("Login liste comptes client : " + client.Login);
+            Debug.WriteLine("Login du client " + client.Login);
+
+            List<Compte> comptes = _context.Comptes.Where(c => (c.ClientId.Equals(client.UtilisateurId))).ToList();
+
+
             ViewData["Client"] = client;
-            return View();
+            return View(comptes);
         }
+
+        [HttpPost]
+        public IActionResult SelectionCompteClient(IFormCollection compte)
+        {
+            Debug.WriteLine("Sélection du compte numéro " + compte["IdCompte"]);
+
+            Compte compteToFind = _context.Comptes.Where(c => (c.CompteId.Equals(Int32.Parse(compte["IdCompte"])))).FirstOrDefault();
+
+            Debug.WriteLine("Envoi du compte : " + compteToFind.NomCompte);
+            return RedirectToAction("IndexClient", compteToFind);
+        }
+
 
         [HttpPost]
         public IActionResult AjoutCompteClient(IFormCollection nouveauRole)
         {
-            int idClient = Int32.Parse(nouveauRole["Id"]);
-
-            Debug.WriteLine("Id : " + idClient);
-            Debug.WriteLine("Nom nouveau rôle : " + nouveauRole["NomRole"]);
-
-            Client client = _context.Clients.Where(c => (c.UtilisateurId.Equals(idClient))).FirstOrDefault();
-
-            Compte compteATrouver = _context.Comptes.Where(c => (
-                c.ClientId.Equals(client.UtilisateurId) &&
-                c.NomCompte.Equals(nouveauRole["NomRole"])
-                )).FirstOrDefault();
-
-            if(compteATrouver == null)
+            if(nouveauRole["NomRole"] != "")
             {
-                Debug.WriteLine("Nouveau compte");
+                int idClient = Int32.Parse(nouveauRole["Id"]);
 
-                Compte newCompte = new Compte() { ClientId = client.UtilisateurId, DateCreation = System.DateTime.Now, NomCompte = nouveauRole["NomRole"] };
-                Debug.WriteLine("Id du client du nouveau compte : " + newCompte.ClientId);
+                Debug.WriteLine("Id : " + idClient);
+                Debug.WriteLine("Nom nouveau rôle : " + nouveauRole["NomRole"]);
+
+                Client client = _context.Clients.Where(c => (c.UtilisateurId.Equals(idClient))).FirstOrDefault();
+
+                Compte compteATrouver = _context.Comptes.Where(c => (
+                    c.ClientId.Equals(client.UtilisateurId) &&
+                    c.NomCompte.Equals(nouveauRole["NomRole"])
+                    )).FirstOrDefault();
+
+                if (compteATrouver == null)
+                {
+                    Debug.WriteLine("Nouveau compte");
+
+                    Compte newCompte = new Compte() { ClientId = client.UtilisateurId, DateCreation = System.DateTime.Now, NomCompte = nouveauRole["NomRole"] };
+                    Debug.WriteLine("Id du client du nouveau compte : " + newCompte.ClientId);
 
 
-                client.AjouterCompte(newCompte);
-                _context.Comptes.Add(newCompte);
-                _context.SaveChanges();
-                return RedirectToAction("ListeComptesClient", client);
+                    client.AjouterCompte(newCompte);
+                    _context.Comptes.Add(newCompte);
+                    _context.SaveChanges();
+                    return RedirectToAction("ListeComptesClient", client);
+                }
             }
-
+            
             return RedirectToAction("ConnectClient");
+        }
+
+
+
+
+        /* -------- IndexClient -------- */
+        [HttpGet]
+        public IActionResult IndexClient(Compte compte)
+        {
+            Debug.WriteLine("Login du client " + compte.NomCompte);
+
+            //ViewData["Compte"] = compte;
+            return View(compte);
         }
     }
 }

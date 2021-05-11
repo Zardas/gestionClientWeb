@@ -1,0 +1,18 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model GestionRelationClient.Models.Compte
+<h3>@Model.NomCompte</h3>
+
+
+
+@using (Html.BeginForm("SelectionCompteClient", "Client", FormMethod.Post))
+{
+<form class="formSelectionCompte" asp-action="SelectionCompteClient">
+    @Html.Hidden("IdCompte", Model.CompteId)
+    <button type="submit" class="btn btn-primary">Sélectionner ce compte</button>
+</form>
+}

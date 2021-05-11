@@ -1,5 +1,5 @@
 ﻿body {
-    
+
 }
 h1 {
     text-align: center;
@@ -40,20 +40,31 @@ nav .menu {
 
 
 /* ---- Connexion et inscription client ---- */
-.connectClient {
+.connectClient, .inscriptionClient {
     text-align: center;
     margin-left: 25%;
     margin-right: 25%;
-    border: 1px solid red;
+}
+    .formInscriptionClient {
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+
+.formInscriptionClient .form-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
-.formInscriptionClient {
-    margin-top: 5%;
-    margin-bottom: 5%;
+
+
+/* ---- Connexion et inscription client ---- */
+.listeComptesClient {
+    margin-left: 10%;
 }
-    .formInscriptionClient .form-group {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-around;
-    }
+.listeComptesClient h2 {
+    text-align: left;
+}
+
+

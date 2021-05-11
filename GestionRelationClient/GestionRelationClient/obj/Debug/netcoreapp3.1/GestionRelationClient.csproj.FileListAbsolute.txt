@@ -421,3 +421,5 @@ C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\g
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Role.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Client\ListeComptesClient.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Compte.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Client\IndexClient.cshtml.g.cs

@@ -4,7 +4,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "_Layout";
-    ViewBag.Title = "Liste comptes client";
+    ViewBag.Title = "";
 }
 <!-- From : https://www.completecsharptutorial.com/asp-net-mvc5/pass-data-using-viewbag-viewdata-and-tempdata-in-asp-net-mvc-5.php -->
 @using GestionRelationClient.Models
@@ -12,9 +12,11 @@
     Client client = ViewData["Client"] as Client;
 }
 
-<h2>@client.Login</h2>
+<div class="listeComptesClient">
 
-<div id="listeComptesClient">
+    <h2>Bienvenue @client.Prenom</h2>
+
+
     @using (Html.BeginForm("AjoutCompteClient", "Client", FormMethod.Post))
     {
         <!-- From : https://www.aspsnippets.com/Articles/ASPNet-MVC-Pass-data-from-View-to-Controller-using-ViewData.aspx -->
@@ -27,4 +29,15 @@
 
         <button type="submit" class="btn btn-primary">Ajouter un compte</button>
     }
+
+    <!-- Liste des comptes -->
+    <div id="list">
+        @model List<GestionRelationClient.Models.Compte>
+        @foreach (GestionRelationClient.Models.Compte compte in Model)
+        {
+            <partial name="_Compte" model=compte />
+        }
+    </div>
 </div>
+
+
