@@ -5,7 +5,7 @@ h1 {
     text-align: center;
 }
 
-/* Menu de naviagation */
+/* ---- Menu de naviagation ---- */
 nav {
     background-color: #212124;
     display: flex;
@@ -36,9 +36,18 @@ nav .menu {
 }
 
 
-.formInscriptionClient {
+
+
+
+/* ---- Connexion et inscription client ---- */
+.connectClient {
+    text-align: center;
     margin-left: 25%;
     margin-right: 25%;
+    border: 1px solid red;
+}
+
+.formInscriptionClient {
     margin-top: 5%;
     margin-bottom: 5%;
 }
@@ -48,12 +57,3 @@ nav .menu {
         flex-wrap: wrap;
         justify-content: space-around;
     }
-
-
-
-
-.toHorizontalyCenter {
-    width: 20%;
-    margin-left: 40%;
-    margin-right: 40%;
-}

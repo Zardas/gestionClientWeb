@@ -40,6 +40,7 @@ namespace GestionRelationClient.Models
             return null;
         }
 
+
         // TODO
         public void ModifierNomCompte(string nouveauNom)
         {

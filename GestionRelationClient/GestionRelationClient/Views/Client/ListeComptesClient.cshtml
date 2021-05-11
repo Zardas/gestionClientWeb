@@ -6,3 +6,25 @@
     Layout = "_Layout";
     ViewBag.Title = "Liste comptes client";
 }
+<!-- From : https://www.completecsharptutorial.com/asp-net-mvc5/pass-data-using-viewbag-viewdata-and-tempdata-in-asp-net-mvc-5.php -->
+@using GestionRelationClient.Models
+@{ 
+    Client client = ViewData["Client"] as Client;
+}
+
+<h2>@client.Login</h2>
+
+<div id="listeComptesClient">
+    @using (Html.BeginForm("AjoutCompteClient", "Client", FormMethod.Post))
+    {
+        <!-- From : https://www.aspsnippets.com/Articles/ASPNet-MVC-Pass-data-from-View-to-Controller-using-ViewData.aspx -->
+        @Html.Hidden("Id", client.UtilisateurId)
+        <div class="form-group">
+            <div>
+                <input type="text" name="NomRole" class="form-control" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ajouter un compte</button>
+    }
+</div>

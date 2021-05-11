@@ -34,17 +34,22 @@ namespace GestionRelationClient.Models
         }
 
 
-        // TODO ?
+
         public void SeConnecter()
         {
             this.LoginStatus = "online";
         }
 
-        // TODO ?
+
         public void Inscrire(string password)
         {
             this.LoginStatus = "offline";
             MotDePasse = Utilitaire.HashPassword(password);
+        }
+
+        public void AjouterCompte(Compte newCompte)
+        {
+            this.Comptes.Add(newCompte);
         }
 
         // TODO ?
