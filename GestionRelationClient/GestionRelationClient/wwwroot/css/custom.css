@@ -59,12 +59,31 @@ nav .menu {
 
 
 
-/* ---- Connexion et inscription client ---- */
+
+
+
+
+
+/* ---- Liste comptes client ---- */
 .listeComptesClient {
     margin-left: 10%;
+    margin-right: 10%;
+    text-align: center;
+}
+.lienVersModifications {
+    display: flex;
+    justify-content: right;
+}
+.lienVersModifications *{
+    text-align: right;
+}
+.lienRetour {
+    text-align: left;
 }
 .listeComptesClient h2 {
     text-align: left;
 }
+
+
 
 

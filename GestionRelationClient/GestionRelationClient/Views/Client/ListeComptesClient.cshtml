@@ -14,30 +14,50 @@
 
 <div class="listeComptesClient">
 
-    <h2>Bienvenue @client.Prenom</h2>
+    <!-- Lien vers modification du compte client -->
 
 
-    @using (Html.BeginForm("AjoutCompteClient", "Client", FormMethod.Post))
+
+    @using (Html.BeginForm("ModificationCompteClient", "Client", FormMethod.Post))
     {
-        <!-- From : https://www.aspsnippets.com/Articles/ASPNet-MVC-Pass-data-from-View-to-Controller-using-ViewData.aspx -->
-        @Html.Hidden("Id", client.UtilisateurId)
-        <div class="form-group">
-            <div>
-                <input type="text" name="NomRole" class="form-control" />
-            </div>
-        </div>
+        <p class="lienVersModifications">
+             @Html.Hidden("ClientId", client.UtilisateurId)
+            <button type="submit" class="btn btn-link">Modificer ce compte</button>
+        </p>
+     }
+       
 
-        <button type="submit" class="btn btn-primary">Ajouter un compte</button>
-    }
 
-    <!-- Liste des comptes -->
-    <div id="list">
-        @model List<GestionRelationClient.Models.Compte>
-        @foreach (GestionRelationClient.Models.Compte compte in Model)
+
+
+
+        <h2>Bienvenue @client.Prenom</h2>
+
+
+
+
+
+        @using (Html.BeginForm("AjoutCompteClient", "Client", FormMethod.Post))
         {
-            <partial name="_Compte" model=compte />
+            <!-- From : https://www.aspsnippets.com/Articles/ASPNet-MVC-Pass-data-from-View-to-Controller-using-ViewData.aspx -->
+            @Html.Hidden("Id", client.UtilisateurId)
+            <div class="form-group">
+                <div>
+                    <input type="text" name="NomRole" class="form-control" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Ajouter un compte</button>
         }
+
+        <!-- Liste des comptes -->
+        <div id="list">
+            @model List<GestionRelationClient.Models.Compte>
+            @foreach (GestionRelationClient.Models.Compte compte in Model)
+            {
+                <partial name="_Compte" model=compte />
+            }
+        </div>
     </div>
-</div>
 
 

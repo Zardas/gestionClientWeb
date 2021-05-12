@@ -58,10 +58,34 @@ namespace GestionRelationClient.Models
 
         }
 
-        // TODO
-        public void ModifierProfil()
-        {
 
+        public void ModifierProfil(string nouveauLogin, string nouveauMail, string nouveauNom, string nouveauPrenom, string nouveauMotDePasse, string nouveauTelephone, int nouveauAge)
+        {
+            if(nouveauLogin != "")
+            {
+                this.Login = nouveauLogin;
+            }
+            if (nouveauNom != "")
+            {
+                this.Nom = nouveauNom;
+            }
+            if (nouveauPrenom != "")
+            {
+                this.Prenom = nouveauPrenom;
+            }
+            if (nouveauMotDePasse != "")
+            {
+                this.MotDePasse = Utilitaire.HashPassword(nouveauMotDePasse);
+            }
+            if (nouveauTelephone != "")
+            {
+                this.Telephone = nouveauTelephone;
+            }
+            if (nouveauAge != 0)
+            {
+                this.Age = nouveauAge;
+            }
         }
+
     }
 }

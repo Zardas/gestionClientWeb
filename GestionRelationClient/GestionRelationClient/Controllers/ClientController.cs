@@ -89,6 +89,7 @@ namespace GestionRelationClient.Controllers
 
         /* -------- ListeComptesClient -------- */
 
+        // TODO : passer cette méthode en POST pour ne plus avoir toutes les infos dans l'url ?
         [HttpGet]
         public IActionResult ListeComptesClient(Client client)
         {
@@ -147,6 +148,101 @@ namespace GestionRelationClient.Controllers
             
             return RedirectToAction("ConnectClient");
         }
+
+
+
+
+        /* -------- ModificationCompteClient -------- */
+
+        [HttpPost]
+        public IActionResult ModificationCompteClient(IFormCollection clientPasse)
+        {
+            int clientId = Int32.Parse(clientPasse["ClientId"]);
+
+            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(clientId)).FirstOrDefault();
+
+            // Tout ça aurait pû être directement géré dans Client.cs, mais je toruve plus propre de ne pas incorporé de bibliothèque http dans le modèle
+            string Login;
+            if(!clientPasse.ContainsKey("Login")) { 
+                Login = "";
+            } else
+            {
+                Login = clientPasse["Login"];
+            }
+            string Mail;
+            if (!clientPasse.ContainsKey("Mail"))
+            {
+                Mail = "";
+            }
+            else
+            {
+                Mail = clientPasse["Mail"];
+            }
+            string Nom;
+            if (!clientPasse.ContainsKey("Nom"))
+            {
+                Nom = "";
+            }
+            else
+            {
+                Nom = clientPasse["Nom"];
+            }
+            string Prenom;
+            if (!clientPasse.ContainsKey("Prenom"))
+            {
+                Prenom = "";
+            }
+            else
+            {
+                Prenom = clientPasse["Prenom"];
+            }
+            string MotDePasse;
+            if (!clientPasse.ContainsKey("MotDePasse"))
+            {
+                MotDePasse = "";
+            }
+            else
+            {
+                MotDePasse = clientPasse["MotDePasse"];
+            }
+            string Telephone;
+            if (!clientPasse.ContainsKey("Telephone"))
+            {
+                Telephone = "";
+            }
+            else
+            {
+                Telephone = clientPasse["Telephone"];
+            }
+            int Age;
+            if (!clientPasse.ContainsKey("Age"))
+            {
+                Age = 0;
+            }
+            else if(clientPasse["Age"] == "")
+            {
+                Age = 0;
+            } else
+            {
+                Age = Int32.Parse(clientPasse["Age"]);
+            }
+
+
+
+            // Modification du compte avec les infos passé (s'il n'a pas rempli de champ, on ne modifie pas)
+            client.ModifierProfil(Login, Mail, Nom, Prenom, MotDePasse, Telephone, Age);
+            _context.SaveChanges();
+
+
+
+            ViewData["Client"] = client;
+            return View();
+        }
+
+
+
+
+
 
 
 

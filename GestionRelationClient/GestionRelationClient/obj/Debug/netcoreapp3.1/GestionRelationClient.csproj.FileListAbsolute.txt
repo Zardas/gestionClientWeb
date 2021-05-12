@@ -423,3 +423,4 @@ C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\g
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Client\ListeComptesClient.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Compte.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Client\IndexClient.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Client\ModificationCompteClient.cshtml.g.cs
