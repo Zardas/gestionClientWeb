@@ -5,14 +5,13 @@
 }
 
 @model GestionRelationClient.Models.Compte
-<h3>@Model.NomCompte</h3>
-
 
 
 @using (Html.BeginForm("SelectionCompteClient", "Client", FormMethod.Post))
 {
-<form class="formSelectionCompte" asp-action="SelectionCompteClient">
+<div class="formSelectionCompte">
+    <h4>@Model.NomCompte</h4>
     @Html.Hidden("IdCompte", Model.CompteId)
     <button type="submit" class="btn btn-primary">Sélectionner ce compte</button>
-</form>
+</div>
 }

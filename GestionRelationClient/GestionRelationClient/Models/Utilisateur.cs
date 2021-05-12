@@ -20,6 +20,8 @@ namespace GestionRelationClient.Models
         public String LoginStatus { get; set; }
 
 
+
+
         public void Connexion()
         {
             this.LoginStatus = "online";

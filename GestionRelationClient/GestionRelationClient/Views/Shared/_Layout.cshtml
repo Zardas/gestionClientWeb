@@ -1,34 +1,35 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
 }
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <link href="~/css/site.min.css" rel="stylesheet" />
-        <link href="~/css/custom.css" rel="stylesheet" />
-        <script src="~/js/site.min.js"></script>
-        <title>@ViewBag.Title</title>
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <link href="~/css/site.min.css" rel="stylesheet" />
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <script src="~/js/site.min.js"></script>
+    <title>@ViewBag.Title</title>
+</head>
 
-    <body>
+<body>
 
-        <!-- HEADER -->
-        <nav>
-            <div class="acceuil">
-                <a class="menuLink" href="#">Accueil</a>    
-            </div>
-            <div class="menu">
-                <a class="menuLink" href="#">Client</a>
-                <a class="menuLink" href="#">Gestionnaire</a>
-            </div>
-        </nav>
+    <!-- HEADER -->
+    <nav>
+        <div class="acceuil">
+            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
+        </div>
+        <div class="menu">
+            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Client</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="ConnectGestionnaire" role="button">Gestionnaire</a>
+        </div>
+    </nav>
 
-        <h1>@ViewBag.Title</h1>
+    <h1>@ViewBag.Title</h1>
 
-        @RenderBody()
-    </body>
+    @RenderBody()
+</body>
 </html>

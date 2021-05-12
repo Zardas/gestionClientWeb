@@ -73,6 +73,16 @@ namespace GestionRelationClient.Controllers
         {
             if(ModelState.IsValid)
             {
+                // On choisit un gestionnaire au hasard à affecter au client
+                List<Gestionnaire> gestionnaires = _context.Gestionnaires.ToList();
+
+                Random rand = new Random();
+                int index = rand.Next(gestionnaires.Count);
+
+                Debug.WriteLine("Gestionnaire " + gestionnaires[index].NomGestionnaire + " choisi au hasard");
+                client.GestionnaireAssocieId = gestionnaires[index].UtilisateurId;
+
+
                 client.Inscrire(client.MotDePasse);
                 _context.Clients.Add(client);
                 _context.SaveChanges();

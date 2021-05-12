@@ -30,7 +30,7 @@ namespace GestionRelationClient.Models
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Support> Supports { get; set; }
         public DbSet<Utilisateur> Utilisateurs { get; set; }
-
+        public DbSet<Administrateur> Administrateurs { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionBuilder)
@@ -42,7 +42,7 @@ namespace GestionRelationClient.Models
                                                     TrustServerCertificate=False;
                                                     ApplicationIntent=ReadWrite;
                                                     MultiSubnetFailover=False;
-                                                    Database=GestionClientDatabaseWebApp;
+                                                    Database=GestionClientDatabaseWebApp3;
                                                     Trusted_Connection=True");
         }
 
@@ -55,6 +55,7 @@ namespace GestionRelationClient.Models
                 .HasDiscriminator<string>("Type_Utilisateur")
                 .HasValue<Client>("est_client")
                 .HasValue<Gestionnaire>("est_gestionnaire")
+                .HasValue<Administrateur>("est_administrateur")
                 .HasValue<Utilisateur>("est_utilisateur");
 
             modelBuilder.Entity<Article>()

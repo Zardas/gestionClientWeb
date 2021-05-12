@@ -25,8 +25,13 @@ namespace GestionRelationClient.Models
         [Required(ErrorMessage = "Age requis !")]
         public int Age { get; set; }
 
+
         // Un client possède plusieurs comptes
         public ICollection<Compte> Comptes;
+
+        public int GestionnaireAssocieId { get; set; }
+
+        public int Solde { get; set; }
 
         public Client()
         {
@@ -64,6 +69,10 @@ namespace GestionRelationClient.Models
             if(nouveauLogin != "")
             {
                 this.Login = nouveauLogin;
+            }
+            if(nouveauMail != "")
+            {
+                this.Mail = nouveauMail;
             }
             if (nouveauNom != "")
             {

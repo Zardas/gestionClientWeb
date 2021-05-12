@@ -19,6 +19,16 @@ namespace GestionRelationClient.Models
         public int StockId { get; set; }
         public Stock Stock { get; set; }
 
+        public int Gain { get; set; }
+
+        public List<Client> ClientsAssocies { get; set; }
+
+        public Gestionnaire()
+        {
+            Gain = 0; // On initialise les gains à 0
+            ClientsAssocies = new List<Client>();
+        }
+
         // TODO
         public void AjouterStock()
         {

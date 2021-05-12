@@ -84,6 +84,15 @@ nav .menu {
     text-align: left;
 }
 
-
+.formSelectionCompte {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    background-color: rgb(220 220 220);
+    padding: 2px;
+}
+.formSelectionCompte button {
+    border-radius: 0;
+}
 
 
