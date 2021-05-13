@@ -36,8 +36,10 @@ namespace GestionRelationClient.Controllers
             List<Produit> produits = _context.Produits.Where(p => p.StockId.Equals(gestionnaire.StockId)).ToList();
             ViewData["ProduitsAssocies"] = produits;
 
+            // On récupère la liste des services pour pouvoir l'afficher
+            List<Service> services = _context.Services.ToList();
+            ViewData["Services"] = services;
 
-            Debug.WriteLine("Nombre de clients associés : " + gestionnaire.ClientsAssocies.Count());
             return View(gestionnaire);
         }
 
@@ -68,8 +70,6 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult AjoutClientAssocie(int IdGestionnaire)
         {
-            Debug.WriteLine("Id envoyé : " + IdGestionnaire);
-
             Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
 
             List<Client> clientsDisponibles = _context.Clients.Where(c => !(c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId))).ToList();
@@ -95,14 +95,19 @@ namespace GestionRelationClient.Controllers
 
 
 
+
+
+
+
+
+
+
+
         /* -------- Formulaire pour ajouter un produit -------- */
         [HttpGet]
         public IActionResult AjouterProduit(int IdGestionnaire)
         {
-            Debug.WriteLine("Id envoyé : " + IdGestionnaire);
-
             Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
-
             
             return View(gestionnaire);
         }
@@ -121,6 +126,7 @@ namespace GestionRelationClient.Controllers
                 Nom = produit["Nom"],
                 Image = produit["Image"],
                 Fabricant = produit["Fabricant"],
+                Type = produit["Type"],
                 Prix = Int32.Parse(produit["Prix"]),
                 Quantite = Int32.Parse(produit["Quantite"]),
                 Capacite = Int32.Parse(produit["Capacite"]),
@@ -154,6 +160,120 @@ namespace GestionRelationClient.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        /* -------- Formulaire pour ajouter un service -------- */
+        [HttpGet]
+        public IActionResult AjouterService(int IdGestionnaire)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+
+            List<Abonnement> abonnements = _context.Abonnements.ToList();
+            ViewData["Abonnements"] = abonnements;
+
+            return View(gestionnaire);
+        }
+
+        /* -------- Ajouter un service -------- */
+        [HttpPost]
+        public IActionResult AjouterService(IFormCollection service)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(service["GestionnaireId"]))).FirstOrDefault();
+
+
+            Abonnement abonnement;
+            // Un abonnement peut ou non être lié à un abonnement
+            if(service["AbonnementAssocie"] == "on")
+            {
+                Debug.WriteLine("Abonnement choisi id : " + service["Abonnement"]);
+                abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(Int32.Parse(service["Abonnement"]))).FirstOrDefault();
+                Debug.WriteLine("Abonnement choisi durée " + abonnement.DureeAbonnement);
+            } else
+            {
+                Debug.WriteLine("Aucun abonnement choisi");
+                abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
+            }
+
+            Service serviceAajouter = new Service()
+            {
+                Nom = service["Nom"],
+                Image = service["Image"],
+                Prix = Int32.Parse(service["Prix"]),
+                Description = service["Description"],
+                Manuel = service["Manuel"],
+                Conditions = service["Conditions"],
+                Abonnement = abonnement,
+                PanierId = 1 // Le panier nul
+            };
+
+            _context.Services.Add(serviceAajouter);
+            _context.SaveChanges();
+
+            return RedirectToAction("AjouterService", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+        }
+
+        /* -------- Supprimer un service -------- */
+        [HttpPost]
+        public IActionResult SuppressionService(IFormCollection serviceEnvoye)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(serviceEnvoye["GestionnaireId"]))).FirstOrDefault();
+            Service service = _context.Services.Where(p => p.ArticleId.Equals(Int32.Parse(serviceEnvoye["ServiceId"]))).FirstOrDefault();
+
+            Debug.WriteLine("Suppresion d'un " + service.Nom + " de la part de " + gestionnaire.NomGestionnaire);
+
+            _context.Services.Remove(service);
+            _context.SaveChanges();
+
+            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /* -------- Formulaire pour ajouter un abonnement -------- */
+        [HttpGet]
+        public IActionResult AjouterAbonnement(int IdGestionnaire)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+
+            return View(gestionnaire);
+        }
+        /* -------- Ajout d'un abonnement -------- */
+        [HttpPost]
+        public IActionResult AjouterAbonnement(IFormCollection abonnementEnvoye)
+        {
+            Abonnement abonnement = new Abonnement()
+            {
+                DureeAbonnement = Int32.Parse(abonnementEnvoye["Duree"])
+            };
+            _context.Abonnements.Add(abonnement);
+            _context.SaveChanges();
+
+            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = Int32.Parse(abonnementEnvoye["GestionnaireId"])});
         }
     }
 }

@@ -9,6 +9,7 @@
 @using GestionRelationClient.Models
 @{
     List<Produit> produits = ViewData["ProduitsAssocies"] as List<Produit>;
+    List<Service> services = ViewData["Services"] as List<Service>;
 }
 
 @model GestionRelationClient.Models.Gestionnaire
@@ -44,6 +45,23 @@
                         @Html.Hidden("ProduitId", produit.ArticleId)
                         <partial name="_ProduitSmall" model=produit />
                         <button type="submit" class="btn"><img src="~/img/moins.png" alt="Supprimer ce produit" /></button>
+                    </div>
+                }
+
+            }
+        </div>
+
+        <!-- Liste des services -->
+        <div class="clientsListe">
+            @foreach (GestionRelationClient.Models.Service service in services)
+            {
+                @using (Html.BeginForm("SuppressionService", "Gestionnaire", FormMethod.Post))
+                {
+                    <div class="formSelectionClient">
+                        @Html.Hidden("GestionnaireId", Model.UtilisateurId)
+                        @Html.Hidden("ServiceId", service.ArticleId)
+                        <partial name="_ServiceSmall" model=service />
+                        <button type="submit" class="btn"><img src="~/img/moins.png" alt="Supprimer ce service" /></button>
                     </div>
                 }
 

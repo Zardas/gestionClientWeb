@@ -6,50 +6,54 @@
     Layout = "_LayoutGestionnaire";
     ViewBag.Title = "";
 }
+@using GestionRelationClient.Models
+@{
+    List<Abonnement> abonnements = ViewData["Abonnements"] as List<Abonnement>;
+}
+
 @model GestionRelationClient.Models.Gestionnaire
 
 <div class="interfaceGestionnaire">
-    <h2>Ajout d'un produit</h2>
+    <h2>Ajout d'un service</h2>
 
     <div class="ajoutArticle">
-        @using (Html.BeginForm("AjouterProduit", "Gestionnaire", FormMethod.Post))
+        @using (Html.BeginForm("AjouterService", "Gestionnaire", FormMethod.Post))
         {
             @Html.Hidden("GestionnaireId", Model.UtilisateurId)
             <div class="form-group">
                 <div>
                     <label for="Nom">Nom</label>
-                    <input type="text" name="Nom" class="form-control" required/>
+                    <input type="text" name="Nom" class="form-control" required />
                 </div>
                 <div>
                     <label for="Image">Image (à placer dans "wwwwroot/img/articles/")</label>
-                    <input type="text" name="Image" class="form-control" required/>
+                    <input type="text" name="Image" class="form-control" required />
                 </div>
-                <div>
-                    <label for="Fabricant">Fabricant</label>
-                    <input type="text" name="Fabricant" class="form-control" required/>
-                </div>
-            </div>
-
-
-            <div class="form-group">
                 <div>
                     <label for="Type">Type</label>
                     <input type="text" name="Type" class="form-control" required />
                 </div>
+                <div class="inputToFlexBox">
+                    <label for="AbonnementAssocie">Associer un abonnement</label>
+                    <input type="checkbox" name="AbonnementAssocie" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div>
                     <label for="Prix">Prix</label>
                     <input type="number" name="Prix" class="form-control" required />
                 </div>
                 <div>
-                    <label for="Quantite">Quantité</label>
-                    <input type="number" name="Quantite" class="form-control" required />
-                </div>
-                <div>
-                    <label for="Capacite">Capacité</label>
-                    <input type="number" name="Capacite" class="form-control" required />
+                    <label for="Abonnement">Abonnement</label>
+                    <select name="Abonnement" class="form-control" required>
+                        @foreach (GestionRelationClient.Models.Abonnement abonnement in abonnements)
+                        {
+                            <option value="@abonnement.AbonnementId">Durée de @abonnement.DureeAbonnement mois</option>
+                        }
+                    </select>
                 </div>
             </div>
-
             <div class="form-group">
                 <div>
                     <label for="Description">Description</label>
@@ -59,10 +63,14 @@
                     <label for="Manuel">Manuel</label>
                     <textarea name="Manuel" class="form-control" required>Manuel du produit</textarea>
                 </div>
+                <div>
+                    <label for="Conditions">Conditions</label>
+                    <textarea name="Conditions" class="form-control" required>Conditions du produit</textarea>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary">Ajouter ce produit</button>
         }
     </div>
-    
+
 </div>

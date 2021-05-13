@@ -430,3 +430,6 @@ C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\g
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Gestionnaire\AjoutClientAssocie.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Gestionnaire\AjouterProduit.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_produitSmall.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Gestionnaire\AjouterAbonnement.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Gestionnaire\AjouterService.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ServiceSmall.cshtml.g.cs
