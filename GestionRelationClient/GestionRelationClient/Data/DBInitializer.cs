@@ -78,6 +78,43 @@ namespace GestionRelationClient.Data
             };
             context.Administrateurs.Add(administrateur1);
 
+            
+            // Ajout d'un abonnement nul
+            Abonnement abonnement1 = new Abonnement()
+            {
+                DureeAbonnement = 0
+            };
+            context.Abonnements.Add(abonnement1);
+
+            // Ajout d'un client nul
+            Client client1 = new Client()
+            {
+                Login = "ClientDefaut",
+                Nom = "Defaut",
+                Mail = "er@ezr.cq",
+                MotDePasse = Utilitaire.HashPassword("azegaze684qs3dqsd!:sdfàçzqè_"),
+            };
+            context.Clients.Add(client1);
+
+            // Ajout d'un compte nul
+            Compte compte1 = new Compte()
+            {
+                NomCompte = "CompteDefaut",
+                ClientId = 2,
+            };
+            context.Comptes.Add(compte1);
+
+            // Ajout d'un panier nul
+            Panier panier1 = new Panier()
+            {
+                Compte = compte1
+            };
+            context.Paniers.Add(panier1);
+
+
+            
+
+            
 
             context.SaveChanges();
 

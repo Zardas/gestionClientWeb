@@ -19,15 +19,14 @@
 
     <!-- HEADER -->
     <nav>
-        <div class="acceuil">
-            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
-        </div>
         <div class="menu">
+            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
             @model GestionRelationClient.Models.Gestionnaire
             <a class="menuLink" asp-controller="Gestionnaire" asp-action="InterfaceGestionnaire" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Menu</a>
             <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjoutClientAssocie" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Associer un client</a>
             <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterProduit" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un produit</a>
-            <a class="menuLink" asp-controller="Service" asp-action="AjouterService" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un service</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterService" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un service</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterAbonnement" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un abonnement</a>
         </div>
     </nav>
 

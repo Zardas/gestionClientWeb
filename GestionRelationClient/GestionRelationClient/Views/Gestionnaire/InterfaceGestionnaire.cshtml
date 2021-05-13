@@ -6,28 +6,51 @@
     Layout = "_LayoutGestionnaire";
     ViewBag.Title = "";
 }
+@using GestionRelationClient.Models
+@{
+    List<Produit> produits = ViewData["ProduitsAssocies"] as List<Produit>;
+}
 
 @model GestionRelationClient.Models.Gestionnaire
 
 <div class="interfaceGestionnaire">
     <h2>Bienvenue @Model.NomGestionnaire</h2>
 
-
-    <!-- Liste des clients associés -->
-    <div class="clientsListe">
-        @foreach (GestionRelationClient.Models.Client client in Model.ClientsAssocies)
-        {
-            @using (Html.BeginForm("SuppressionClientAssocie", "Gestionnaire", FormMethod.Post))
+    <div class="lists">
+        <!-- Liste des clients associés -->
+        <div class="clientsListe">
+            @foreach (GestionRelationClient.Models.Client client in Model.ClientsAssocies)
             {
-                <div class="formSelectionClient">
-                    @Html.Hidden("IdClient", client.UtilisateurId)
-                    <partial name="_Client" model=client />
-                    <button type="submit" class="btn"><img src="~/img/moins.png" alt="Désassocier ce compte" /></button>
-                </div>
+                @using (Html.BeginForm("SuppressionClientAssocie", "Gestionnaire", FormMethod.Post))
+                {
+                    <div class="formSelectionClient">
+                        @Html.Hidden("IdClient", client.UtilisateurId)
+                        <partial name="_Client" model=client />
+                        <button type="submit" class="btn"><img src="~/img/moins.png" alt="Désassocier ce compte" /></button>
+                    </div>
+                }
+
             }
-            
-        }
+        </div>
+
+        <!-- Liste des produits associés -->
+        <div class="clientsListe">
+            @foreach (GestionRelationClient.Models.Produit produit in produits)
+            {
+                @using (Html.BeginForm("SuppressionProduit", "Gestionnaire", FormMethod.Post))
+                {
+                    <div class="formSelectionClient">
+                        @Html.Hidden("GestionnaireId", Model.UtilisateurId)
+                        @Html.Hidden("ProduitId", produit.ArticleId)
+                        <partial name="_ProduitSmall" model=produit />
+                        <button type="submit" class="btn"><img src="~/img/moins.png" alt="Supprimer ce produit" /></button>
+                    </div>
+                }
+
+            }
+        </div>
     </div>
+    
 </div>
 
 

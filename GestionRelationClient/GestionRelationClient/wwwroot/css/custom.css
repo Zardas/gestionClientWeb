@@ -59,11 +59,6 @@ nav .menu {
 
 
 
-
-
-
-
-
 /* ---- Liste comptes client ---- */
 .listeComptesClient {
     margin-left: 10%;
@@ -134,21 +129,27 @@ nav .menu {
 /*                                          Partie Gestionnaire                                         */
 /*------------------------------------------------------------------------------------------------------*/
 .interfaceGestionnaire {
-    border: 1px solid blue;
     margin-left: 5%;
     margin-right: 5%;
+}
+.interfaceGestionnaire .lists {
+    border: 1px solid red;
+    display: flex;
+    justify-content: space-between;
 }
 .clientsListe {
     width: 30%;
     display: flex;
     justify-content: initial;
     flex-direction: column;
+    border: 1px solid blue;
 }
 .clientListeAajouter {
     width: 50%;
 }
 .formSelectionClient {
     padding: 0;
+    padding-left: 5px;
     margin-top: 15px;
     display: flex;
     justify-content: space-between;
@@ -171,4 +172,18 @@ nav .menu {
         vertical-align: middle;
         height: 60px;
         line-height: 60px;
+    }
+
+
+/* ---- Ajout d'un article ---- */
+
+.ajoutArticle {
+    border: 1px solid red;
+    text-align: center;
+}
+    .ajoutArticle .form-group {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
     }

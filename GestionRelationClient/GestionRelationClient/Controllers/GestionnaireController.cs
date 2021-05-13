@@ -32,6 +32,11 @@ namespace GestionRelationClient.Controllers
             List<Client> clientsAssocies = _context.Clients.Where(c => c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId)).ToList();
             gestionnaire.ClientsAssocies = clientsAssocies;
 
+            // On récupère la liste des produits associés pour pouvoir l'afficher
+            List<Produit> produits = _context.Produits.Where(p => p.StockId.Equals(gestionnaire.StockId)).ToList();
+            ViewData["ProduitsAssocies"] = produits;
+
+
             Debug.WriteLine("Nombre de clients associés : " + gestionnaire.ClientsAssocies.Count());
             return View(gestionnaire);
         }
@@ -85,6 +90,70 @@ namespace GestionRelationClient.Controllers
 
             Debug.WriteLine("Client " + client.Nom + " à associer à " + gestionnaire.NomGestionnaire);
             return RedirectToAction("AjoutClientAssocie", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+        }
+
+
+
+
+        /* -------- Formulaire pour ajouter un produit -------- */
+        [HttpGet]
+        public IActionResult AjouterProduit(int IdGestionnaire)
+        {
+            Debug.WriteLine("Id envoyé : " + IdGestionnaire);
+
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+
+            
+            return View(gestionnaire);
+        }
+
+        /* -------- Ajouter un produit -------- */
+        [HttpPost]
+        public IActionResult AjouterProduit(IFormCollection produit)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(produit["GestionnaireId"]))).FirstOrDefault();
+
+            // Un produit n'est pas lié à un abonnement
+            Abonnement abonnementNul = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
+
+            Produit produitAajouter = new Produit()
+            {
+                Nom = produit["Nom"],
+                Image = produit["Image"],
+                Fabricant = produit["Fabricant"],
+                Prix = Int32.Parse(produit["Prix"]),
+                Quantite = Int32.Parse(produit["Quantite"]),
+                Capacite = Int32.Parse(produit["Capacite"]),
+                Description = produit["Description"],
+                Manuel = produit["Manuel"],
+                StockId = gestionnaire.StockId,
+                Abonnement = abonnementNul,
+                PanierId = 1 // Le panier nul
+            };
+
+            _context.Produits.Add(produitAajouter);
+            _context.SaveChanges();
+
+            return RedirectToAction("AjouterProduit", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+        }
+
+        /* -------- Réduire de 1 la quantité un produit -------- */
+        [HttpPost]
+        public IActionResult SuppressionProduit(IFormCollection produitEnvoye)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(produitEnvoye["GestionnaireId"]))).FirstOrDefault();
+            Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(Int32.Parse(produitEnvoye["ProduitId"]))).FirstOrDefault();
+
+            Debug.WriteLine("Suppresion d'un " + produit.Nom + " de la part de " + gestionnaire.NomGestionnaire);
+
+            produit.Quantite--;
+            if(produit.Quantite <= 0)
+            {
+                _context.Produits.Remove(produit);
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
         }
     }
 }

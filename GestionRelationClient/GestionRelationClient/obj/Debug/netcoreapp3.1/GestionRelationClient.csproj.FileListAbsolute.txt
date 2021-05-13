@@ -428,3 +428,5 @@ C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\g
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Administrateur\InterfaceAdministrateur.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LayoutGestionnaire.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Gestionnaire\AjoutClientAssocie.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Gestionnaire\AjouterProduit.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_produitSmall.cshtml.g.cs
