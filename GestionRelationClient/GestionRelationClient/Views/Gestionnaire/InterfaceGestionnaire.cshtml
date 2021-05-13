@@ -27,7 +27,9 @@
                     <div class="formSelectionClient">
                         @Html.Hidden("IdClient", client.UtilisateurId)
                         <partial name="_Client" model=client />
-                        <button type="submit" class="btn"><img src="~/img/moins.png" alt="Désassocier ce compte" /></button>
+                        <div class="buttons">
+                            <button type="submit" class="btn"><img src="~/img/moins2.png" alt="Désassocier ce compte" /></button>
+                        </div>
                     </div>
                 }
 
@@ -38,15 +40,20 @@
         <div class="clientsListe">
             @foreach (GestionRelationClient.Models.Produit produit in produits)
             {
-                @using (Html.BeginForm("SuppressionProduit", "Gestionnaire", FormMethod.Post))
-                {
-                    <div class="formSelectionClient">
+            <div class="formSelectionClient">
+                <partial name="_ProduitSmall" model="produit" />
+                <div class="buttons">
+                    <a asp-controller="Gestionnaire" asp-action="ModificationProduit" asp-route-IdGestionnaire="@Model.UtilisateurId" asp-route-ProduitId="@produit.ArticleId" role="button">
+                        <img src="~/img/modifier.png" alt="Modifier ce produit" />
+                    </a>
+                    @using (Html.BeginForm("SuppressionProduit", "Gestionnaire", FormMethod.Post))
+                    {
                         @Html.Hidden("GestionnaireId", Model.UtilisateurId)
                         @Html.Hidden("ProduitId", produit.ArticleId)
-                        <partial name="_ProduitSmall" model=produit />
-                        <button type="submit" class="btn"><img src="~/img/moins.png" alt="Supprimer ce produit" /></button>
-                    </div>
-                }
+                        <button type="submit" class="btn"><img src="~/img/moins2.png" alt="Supprimer ce produit" /></button>
+                    }
+                </div>
+            </div>
 
             }
         </div>
@@ -55,15 +62,20 @@
         <div class="clientsListe">
             @foreach (GestionRelationClient.Models.Service service in services)
             {
-                @using (Html.BeginForm("SuppressionService", "Gestionnaire", FormMethod.Post))
-                {
-                    <div class="formSelectionClient">
-                        @Html.Hidden("GestionnaireId", Model.UtilisateurId)
-                        @Html.Hidden("ServiceId", service.ArticleId)
-                        <partial name="_ServiceSmall" model=service />
-                        <button type="submit" class="btn"><img src="~/img/moins.png" alt="Supprimer ce service" /></button>
+                <div class="formSelectionClient">
+                    <partial name="_ServiceSmall" model="service" />
+                    <div class="buttons">
+                        <a asp-controller="Gestionnaire" asp-action="ModificationService" asp-route-IdGestionnaire="@Model.UtilisateurId" asp-route-ServiceId="@service.ArticleId" role="button">
+                            <img src="~/img/modifier.png" alt="Modifier ce service" />
+                        </a>
+                        @using (Html.BeginForm("SuppressionService", "Gestionnaire", FormMethod.Post))
+                        {
+                            @Html.Hidden("GestionnaireId", Model.UtilisateurId)
+                            @Html.Hidden("ProduitId", service.ArticleId)
+                            <button type="submit" class="btn"><img src="~/img/moins2.png" alt="Supprimer ce service" /></button>
+                        }
                     </div>
-                }
+                </div>
 
             }
         </div>

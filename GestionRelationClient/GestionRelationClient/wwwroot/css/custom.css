@@ -159,20 +159,26 @@ nav .menu {
 .formSelectionClient:hover {
     background-color: rgb(220 220 220);
 }
-    .formSelectionClient button {
-        height: 60px;
-        padding: 0;
-    }
-        .formSelectionClient button img {
-            height: 60px;
-            margin: 0;
-        }
     .formSelectionClient h4 {
-        font-size: 25px;
+        font-size: 12px;
         vertical-align: middle;
         height: 60px;
         line-height: 60px;
     }
+    .formSelectionClient .buttons {
+        display: flex;
+        justify-content: right;
+    }
+    .formSelectionClient .buttons button, .formSelectionClient .buttons a {
+        height: 60px;
+        padding: 0;
+    }
+        .formSelectionClient .buttons button img, .formSelectionClient .buttons a img {
+            height: 60px;
+            margin: 0;
+        }
+
+    
 
 
 /* ---- Ajout d'un article ---- */

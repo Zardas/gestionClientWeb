@@ -1,0 +1,92 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_LayoutGestionnaire";
+    ViewBag.Title = "";
+}
+@using GestionRelationClient.Models
+@{
+    Service service = ViewData["Service"] as Service;
+    List<Abonnement> abonnements = ViewData["Abonnements"] as List<Abonnement>;
+}
+
+
+@model GestionRelationClient.Models.Gestionnaire
+
+<div class="interfaceGestionnaire">
+    <h2>Modification de @service.Nom</h2>
+
+    <div class="ajoutArticle">
+        @using (Html.BeginForm("ModifierService", "Gestionnaire", FormMethod.Post))
+        {
+            @Html.Hidden("GestionnaireId", Model.UtilisateurId)
+            @Html.Hidden("ServiceId", service.ArticleId)
+            <div class="form-group">
+                <div>
+                    <label for="Nom">Nom</label>
+                    <input type="text" name="Nom" class="form-control" value="@service.Nom" required />
+                </div>
+                <div>
+                    <label for="Image">Image (à placer dans "wwwwroot/img/articles/")</label>
+                    <input type="text" name="Image" class="form-control" value="@service.Image" required />
+                </div>
+                <div>
+                    <label for="Type">Type</label>
+                    <input type="text" name="Type" class="form-control" value="@service.Type" required />
+                </div>
+                <div class="inputToFlexBox">
+                    <label for="AbonnementAssocie">Associer un abonnement</label>
+                    @if (service.AbonnementId == 1)
+                    {
+                        <input type="checkbox" name="AbonnementAssocie" class="form-control" />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="AbonnementAssocie" checked class="form-control" /> 
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="Prix">Prix</label>
+                    <input type="number" name="Prix" class="form-control" value="@service.Prix" required />
+                </div>
+                <div>
+                    <label for="Abonnement">Abonnement</label>
+                    <select name="Abonnement" class="form-control" required>
+                        @foreach (GestionRelationClient.Models.Abonnement abonnement in abonnements)
+                        {
+                             @if (service.AbonnementId == abonnement.AbonnementId)
+                             {
+                                 <option value="@abonnement.AbonnementId" selected>Durée de @abonnement.DureeAbonnement</option>
+                             } else
+                            {
+                                 <option value="@abonnement.AbonnementId">Durée de @abonnement.DureeAbonnement mois</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="Description">Description</label>
+                    <textarea name="Description" class="form-control" required>@service.Description</textarea>
+                </div>
+                <div>
+                    <label for="Manuel">Manuel</label>
+                    <textarea name="Manuel" class="form-control" required>@service.Manuel</textarea>
+                </div>
+                <div>
+                    <label for="Conditions">Conditions</label>
+                    <textarea name="Conditions" class="form-control" required>@service.Conditions</textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Ajouter ce produit</button>
+        }
+    </div>
+
+</div>

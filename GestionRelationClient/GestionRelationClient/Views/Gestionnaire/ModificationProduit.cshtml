@@ -1,0 +1,75 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_LayoutGestionnaire";
+    ViewBag.Title = "";
+}
+@using GestionRelationClient.Models
+@{
+    Produit produit = ViewData["Produit"] as Produit;
+}
+
+
+@model GestionRelationClient.Models.Gestionnaire
+
+<div class="interfaceGestionnaire">
+    <h2>Modification de @produit.Nom</h2>
+
+    <div class="ajoutArticle">
+        @using (Html.BeginForm("ModifierProduit", "Gestionnaire", FormMethod.Post))
+        {
+            @Html.Hidden("GestionnaireId", Model.UtilisateurId)
+            @Html.Hidden("ProduitId", produit.ArticleId)
+            <div class="form-group">
+                <div>
+                    <label for="Nom">Nom</label>
+                    <input type="text" name="Nom" class="form-control" value="@produit.Nom" required />
+                </div>
+                <div>
+                    <label for="Image">Image (à placer dans "wwwwroot/img/articles/")</label>
+                    <input type="text" name="Image" class="form-control" value="@produit.Image" required />
+                </div>
+                <div>
+                    <label for="Fabricant">Fabricant</label>
+                    <input type="text" name="Fabricant" class="form-control" value="@produit.Fabricant" required />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div>
+                    <label for="Type">Type</label>
+                    <input type="text" name="Type" class="form-control" value="@produit.Type" required />
+                </div>
+                <div>
+                    <label for="Prix">Prix</label>
+                    <input type="number" name="Prix" class="form-control" value="@produit.Prix" required />
+                </div>
+                <div>
+                    <label for="Quantite">Quantité</label>
+                    <input type="number" name="Quantite" class="form-control" value="@produit.Quantite" required />
+                </div>
+                <div>
+                    <label for="Capacite">Capacité</label>
+                    <input type="number" name="Capacite" class="form-control" value="@produit.Capacite" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="Description">Description</label>
+                    <textarea name="Description" class="form-control" required>@produit.Description</textarea>
+                </div>
+                <div>
+                    <label for="Manuel">Manuel</label>
+                    <textarea name="Manuel" class="form-control" required>@produit.Manuel</textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Modifier ce produit</button>
+        }
+    </div>
+
+</div>

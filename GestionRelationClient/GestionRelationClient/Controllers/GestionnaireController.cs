@@ -116,6 +116,7 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult AjouterProduit(IFormCollection produit)
         {
+            Debug.WriteLine("FLAG A : type : " + produit["Type"]);
             Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(produit["GestionnaireId"]))).FirstOrDefault();
 
             // Un produit n'est pas lié à un abonnement
@@ -161,6 +162,47 @@ namespace GestionRelationClient.Controllers
 
             return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
         }
+
+
+
+        /* -------- Modification du produit -------- */
+        [HttpGet]
+        public IActionResult ModificationProduit(int IdGestionnaire, int ProduitId)
+        {
+            Debug.WriteLine("Id gestionnaire : " + IdGestionnaire);
+            Debug.WriteLine("Id client : " + ProduitId);
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+
+            Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(ProduitId)).FirstOrDefault();
+            ViewData["Produit"] = produit;
+
+            return View(gestionnaire);
+        }
+        [HttpPost]
+        public IActionResult ModifierProduit(IFormCollection produitAmodifier)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(produitAmodifier["GestionnaireId"]))).FirstOrDefault();
+
+            Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(Int32.Parse(produitAmodifier["ProduitId"]))).FirstOrDefault();
+
+            produit.Nom = produitAmodifier["Nom"];
+            produit.Image = produitAmodifier["Image"];
+            produit.Fabricant = produitAmodifier["Fabricant"];
+            produit.Type = produitAmodifier["Type"];
+            produit.Prix = Int32.Parse(produitAmodifier["Prix"]);
+            produit.Quantite = Int32.Parse(produitAmodifier["Quantite"]);
+            produit.Capacite = Int32.Parse(produitAmodifier["Capacite"]);
+            produit.Description = produitAmodifier["Description"];
+            produit.Manuel = produitAmodifier["Manuel"];
+
+            _context.SaveChanges();
+
+            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+        }
+
+
+
+
 
 
 
@@ -238,6 +280,51 @@ namespace GestionRelationClient.Controllers
             return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
         }
 
+
+        /* -------- Modification du service -------- */
+        [HttpGet]
+        public IActionResult ModificationService(int IdGestionnaire, int ServiceId)
+        {
+            Debug.WriteLine("Id gestionnaire : " + IdGestionnaire);
+            Debug.WriteLine("Id client : " + ServiceId);
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+
+            Service service = _context.Services.Where(s => s.ArticleId.Equals(ServiceId)).FirstOrDefault();
+            ViewData["Service"] = service;
+
+            List<Abonnement> abonnements = _context.Abonnements.ToList();
+            ViewData["Abonnements"] = abonnements;
+
+            return View(gestionnaire);
+        }
+        [HttpPost]
+        public IActionResult ModifierService(IFormCollection serviceAmodifier)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(serviceAmodifier["GestionnaireId"]))).FirstOrDefault();
+
+            Service service = _context.Services.Where(s => s.ArticleId.Equals(Int32.Parse(serviceAmodifier["ServiceId"]))).FirstOrDefault();
+
+            service.Nom = serviceAmodifier["Nom"];
+            service.Image = serviceAmodifier["Image"];
+            service.Type = serviceAmodifier["Type"];
+            service.Prix = Int32.Parse(serviceAmodifier["Prix"]);
+            service.Description = serviceAmodifier["Description"];
+            service.Manuel = serviceAmodifier["Manuel"];
+            service.Conditions = serviceAmodifier["Conditions"];
+
+            // Un abonnement peut ou non être lié à un abonnement
+            if (serviceAmodifier["AbonnementAssocie"] == "on")
+            {
+                service.Abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(Int32.Parse(serviceAmodifier["Abonnement"]))).FirstOrDefault();
+            }
+            else
+            {
+                service.Abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+        }
 
 
 

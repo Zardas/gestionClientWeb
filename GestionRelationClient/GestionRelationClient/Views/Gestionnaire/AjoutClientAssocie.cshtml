@@ -26,7 +26,9 @@
                     @Html.Hidden("IdClient", client.UtilisateurId)
                     @Html.Hidden("IdGestionnaire", Model.UtilisateurId)
                     <partial name="_Client" model=client />
-                    <button type="submit" class="btn"><img src="~/img/plus.png" alt="Associer ce compte" /></button>
+                    <div class="buttons">
+                        <button type="submit" class="btn"><img src="~/img/plus2.png" alt="Associer ce compte" /></button>
+                    </div>
                 </div>
             }
         }
