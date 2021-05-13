@@ -32,19 +32,35 @@ namespace GestionRelationClient.Controllers
         }
 
         [HttpPost]
-        public IActionResult ConnectClient(IFormCollection client)
+        public IActionResult ConnectClient(IFormCollection utilisateur)
         {
 
-            if(client["Login"] != "" && client["MotDePasse"] != "")
+            if(utilisateur["Login"] != "" && utilisateur["MotDePasse"] != "")
             {
-                Client clientATrouver = _context.Clients.Where(c => (c.Login.Equals(client["Login"]) && c.MotDePasse.Equals(Utilitaire.HashPassword(client["MotDePasse"])))).FirstOrDefault();
+                Utilisateur utilisateurATrouver = _context.Utilisateurs.Where(c => (c.Login.Equals(utilisateur["Login"]) && c.MotDePasse.Equals(Utilitaire.HashPassword(utilisateur["MotDePasse"])))).FirstOrDefault();
 
-                if (clientATrouver != null)
+                if (utilisateurATrouver != null)
                 {
-                    Debug.WriteLine("Client connu :)");
-                    clientATrouver.SeConnecter();
+                    Debug.WriteLine("Utilisateur connu :)");
+                    utilisateurATrouver.Connexion();
                     _context.SaveChanges();
-                    return RedirectToAction("ListeComptesClient", clientATrouver);
+
+
+                    // On redirige différemment selon que l'on a trouvé un client, un gestionnaire ou un administrateur
+                    Debug.WriteLine("Type : " + utilisateurATrouver.GetType());
+
+                    switch(utilisateurATrouver.GetType().ToString())
+                    {
+                        case "GestionRelationClient.Models.Client":
+                            return RedirectToAction("ListeComptesClient", new { ClientId = utilisateurATrouver.UtilisateurId });
+                        case "GestionRelationClient.Models.Gestionnaire":
+                            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = utilisateurATrouver.UtilisateurId });
+                        case "GestionRelationClient.Models.Administrateur":
+                            return RedirectToAction("InterfaceAdministrateur", "Administrateur", utilisateurATrouver);
+                        default:
+                            return View();
+                    }
+
                 }
             }
 
@@ -82,8 +98,11 @@ namespace GestionRelationClient.Controllers
                 Debug.WriteLine("Gestionnaire " + gestionnaires[index].NomGestionnaire + " choisi au hasard");
                 client.GestionnaireAssocieId = gestionnaires[index].UtilisateurId;
 
-
+                
                 client.Inscrire(client.MotDePasse);
+
+                gestionnaires[index].ClientsAssocies.Add(client);
+
                 _context.Clients.Add(client);
                 _context.SaveChanges();
                 return RedirectToAction("InscriptionClient");
@@ -101,8 +120,12 @@ namespace GestionRelationClient.Controllers
 
         // TODO : passer cette méthode en POST pour ne plus avoir toutes les infos dans l'url ?
         [HttpGet]
-        public IActionResult ListeComptesClient(Client client)
+        public IActionResult ListeComptesClient(int ClientId)
         {
+            Debug.WriteLine("Id client fourni : " + ClientId);
+
+            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(ClientId)).FirstOrDefault();
+
             Debug.WriteLine("Login du client " + client.Login);
 
             List<Compte> comptes = _context.Comptes.Where(c => (c.ClientId.Equals(client.UtilisateurId))).ToList();
@@ -120,39 +143,40 @@ namespace GestionRelationClient.Controllers
             Compte compteToFind = _context.Comptes.Where(c => (c.CompteId.Equals(Int32.Parse(compte["IdCompte"])))).FirstOrDefault();
 
             Debug.WriteLine("Envoi du compte : " + compteToFind.NomCompte);
-            return RedirectToAction("IndexClient", compteToFind);
+            return RedirectToAction("InterfaceClient", new { CompteId = compteToFind.CompteId });
         }
 
 
         [HttpPost]
-        public IActionResult AjoutCompteClient(IFormCollection nouveauRole)
+        public IActionResult AjoutCompteClient(IFormCollection nouveauCompte)
         {
-            if(nouveauRole["NomRole"] != "")
+            if(nouveauCompte["NomRole"] != "")
             {
-                int idClient = Int32.Parse(nouveauRole["Id"]);
+                int idClient = Int32.Parse(nouveauCompte["Id"]);
 
-                Debug.WriteLine("Id : " + idClient);
-                Debug.WriteLine("Nom nouveau rôle : " + nouveauRole["NomRole"]);
 
                 Client client = _context.Clients.Where(c => (c.UtilisateurId.Equals(idClient))).FirstOrDefault();
 
                 Compte compteATrouver = _context.Comptes.Where(c => (
                     c.ClientId.Equals(client.UtilisateurId) &&
-                    c.NomCompte.Equals(nouveauRole["NomRole"])
+                    c.NomCompte.Equals(nouveauCompte["NomRole"])
                     )).FirstOrDefault();
 
                 if (compteATrouver == null)
                 {
-                    Debug.WriteLine("Nouveau compte");
 
-                    Compte newCompte = new Compte() { ClientId = client.UtilisateurId, DateCreation = System.DateTime.Now, NomCompte = nouveauRole["NomRole"] };
-                    Debug.WriteLine("Id du client du nouveau compte : " + newCompte.ClientId);
 
+                    Compte newCompte = new Compte() { ClientId = client.UtilisateurId, DateCreation = System.DateTime.Now, NomCompte = nouveauCompte["NomRole"] };
+                    Panier newPanier = new Panier() { Compte = newCompte };
 
                     client.AjouterCompte(newCompte);
+
                     _context.Comptes.Add(newCompte);
+                    _context.Paniers.Add(newPanier);
                     _context.SaveChanges();
-                    return RedirectToAction("ListeComptesClient", client);
+
+
+                    return RedirectToAction("ListeComptesClient", new { ClientId = client.UtilisateurId });
                 }
             }
             
@@ -259,8 +283,10 @@ namespace GestionRelationClient.Controllers
 
         /* -------- IndexClient -------- */
         [HttpGet]
-        public IActionResult IndexClient(Compte compte)
+        public IActionResult InterfaceClient(int CompteId)
         {
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+
             Debug.WriteLine("Login du client " + compte.NomCompte);
 
             //ViewData["Compte"] = compte;

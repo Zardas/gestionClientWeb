@@ -40,10 +40,7 @@ namespace GestionRelationClient.Models
 
 
 
-        public void SeConnecter()
-        {
-            this.LoginStatus = "online";
-        }
+        
 
 
         public void Inscrire(string password)

@@ -1,0 +1,34 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_LayoutGestionnaire";
+    ViewBag.Title = "";
+}
+@using GestionRelationClient.Models
+@{
+    List<Client> clients = ViewData["clientsDisponibles"] as List<Client>;
+}
+@model GestionRelationClient.Models.Gestionnaire
+
+<div class="interfaceGestionnaire">
+    <h2>Liste des clients disponibles</h2>
+
+
+    <!-- Liste des clients disponibles -->
+    <div class="clientsListe clientListeAajouter">
+        @foreach (GestionRelationClient.Models.Client client in clients)
+        {
+            @using (Html.BeginForm("AjoutClientAssocie", "Gestionnaire", FormMethod.Post))
+            {
+                <div class="formSelectionClient">
+                    @Html.Hidden("IdClient", client.UtilisateurId)
+                    @Html.Hidden("IdGestionnaire", Model.UtilisateurId)
+                    <partial name="_Client" model=client />
+                    <button type="submit" class="btn"><img src="~/img/plus.png" alt="Associer ce compte" /></button>
+                </div>
+            }
+        }
+    </div>
+</div>

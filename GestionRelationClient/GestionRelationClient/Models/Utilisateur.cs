@@ -21,7 +21,6 @@ namespace GestionRelationClient.Models
 
 
 
-
         public void Connexion()
         {
             this.LoginStatus = "online";

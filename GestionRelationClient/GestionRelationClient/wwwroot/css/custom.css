@@ -88,11 +88,87 @@ nav .menu {
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
-    background-color: rgb(220 220 220);
+    background-color: rgb(235 235 235);
     padding: 2px;
 }
+    .formSelectionCompte:hover {
+        background-color: rgb(220 220 220);
+    }
 .formSelectionCompte button {
     border-radius: 0;
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*------------------------------------------------------------------------------------------------------*/
+/*                                          Partie Gestionnaire                                         */
+/*------------------------------------------------------------------------------------------------------*/
+.interfaceGestionnaire {
+    border: 1px solid blue;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.clientsListe {
+    width: 30%;
+    display: flex;
+    justify-content: initial;
+    flex-direction: column;
+}
+.clientListeAajouter {
+    width: 50%;
+}
+.formSelectionClient {
+    padding: 0;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(235 235 235);
+    height: 60px;
+}
+.formSelectionClient:hover {
+    background-color: rgb(220 220 220);
+}
+    .formSelectionClient button {
+        height: 60px;
+        padding: 0;
+    }
+        .formSelectionClient button img {
+            height: 60px;
+            margin: 0;
+        }
+    .formSelectionClient h4 {
+        font-size: 25px;
+        vertical-align: middle;
+        height: 60px;
+        line-height: 60px;
+    }

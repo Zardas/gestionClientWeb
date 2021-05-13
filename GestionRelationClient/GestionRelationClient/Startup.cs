@@ -34,7 +34,8 @@ namespace GestionRelationClient
             app.UseMvc(routes =>
             {
                 routes.MapRoute("Default", "{controller=Client}/{action=ConnectClient}");
-                routes.MapRoute("gestionnaire", "{controller=Gestionnaire}/{action=InterfaceGestionnaire}");
+                routes.MapRoute("Gestionnaire", "{controller=Gestionnaire}/{action=InterfaceGestionnaire}");
+                routes.MapRoute("Administrateur", "{controller=Administrateur}/{action=InterfaceAdministrateur}");
             });
             app.UseStaticFiles();
         }

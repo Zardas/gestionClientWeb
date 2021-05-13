@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="~/css/site.min.css" rel="stylesheet" />
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <script src="~/js/site.min.js"></script>
+    <title>@ViewBag.Title</title>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <nav>
+        <div class="acceuil">
+            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
+        </div>
+        <div class="menu">
+            @model GestionRelationClient.Models.Gestionnaire
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="InterfaceGestionnaire" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Menu</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjoutClientAssocie" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Associer un client</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterProduit" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un produit</a>
+            <a class="menuLink" asp-controller="Service" asp-action="AjouterService" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un service</a>
+        </div>
+    </nav>
+
+    @RenderBody()
+</body>
+</html>
