@@ -20,9 +20,31 @@
 <div class="interfaceGestionnaire">
     <div class="bienvenueInterfaceClient">
         <h2>Connecté sous @Model.NomCompte</h2>
-        <p>Total du panier : @ViewData["PrixTotal"] $</p>
+        <div>
+            <p>Total du panier : @ViewData["PrixTotal"] $</p>
+            @using (Html.BeginForm("GenererFacture", "Client", FormMethod.Post))
+            {
+                @Html.Hidden("CompteId", Model.CompteId)
+                <button type="submit" class="btn btn-primary">Générer une facture</button>
+            }
+            @if (ViewData["ErreurSolde"].ToString() == "True")
+            {
+                <p class="soldeTropBas">
+                    <a asp-controller="Client" asp-action="SoldeClient" asp-route-CompteId="@Model.CompteId" role="button">Solde trop bas</a>
+                </p>
+            }
+        </div>
     </div>
 
+    <div class="rechercheString">
+        @using (Html.BeginForm("InterfaceClient", "Client", FormMethod.Post))
+        {
+            @Html.Hidden("CompteId", Model.CompteId)
+            <input type="text" name="StringRecherchee" class="form-control" placeholder="Recherche" />
+            <button type="submit" class="btn"><img src="~/img/search.png" alt="Recherche" /></button>
+        }
+    </div>
+    
 
     <div class="lists">
 

@@ -109,6 +109,32 @@ nav .menu {
     display: flex;
     justify-content: space-between;
 }
+.bienvenueInterfaceClient div .soldeTropBas {
+    text-align: center;
+    text-decoration: none;
+}
+.bienvenueInterfaceClient div .soldeTropBas a {
+    color: red;
+}
+
+.rechercheString {
+    margin-top: 20px;
+    width: 30%;
+}
+.rechercheString form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.rechercheString form input {
+    width: 90%;
+}
+.rechercheString form button {
+    height: 20px;
+}
+.rechercheString form button img {
+    height: 20px;
+}
 
 /* ----DétailsArticle ---- */
 .detailsArticle {
@@ -152,8 +178,11 @@ nav .menu {
 
 
 
-
-
+/* ---- Liste facture ---- */
+.listeFactures {
+    width: 40%;
+    border: 1px solid red;
+}
 
 
 

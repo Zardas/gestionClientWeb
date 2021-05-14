@@ -143,7 +143,7 @@ namespace GestionRelationClient.Controllers
             Compte compteToFind = _context.Comptes.Where(c => (c.CompteId.Equals(Int32.Parse(compte["IdCompte"])))).FirstOrDefault();
 
             Debug.WriteLine("Envoi du compte : " + compteToFind.NomCompte);
-            return RedirectToAction("InterfaceClient", new { CompteId = compteToFind.CompteId });
+            return RedirectToAction("InterfaceClient", new { CompteId = compteToFind.CompteId, stringRecherchee = "" });
         }
 
 
@@ -282,17 +282,18 @@ namespace GestionRelationClient.Controllers
 
         /* -------- IndexClient -------- */
         [HttpGet]
-        public IActionResult InterfaceClient(int CompteId)
+        public IActionResult InterfaceClient(int CompteId, string stringRecherchee, bool erreurSolde)
         {
+
             Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
             Panier panier = _context.Paniers.Where(p => p.CompteId.Equals(compte.CompteId)).FirstOrDefault();
 
             List<Article> articleDansPanier = _context.Articles.Where(a => a.PanierId.Equals(panier.PanierId)).ToList();
 
-            List<Produit> produitsDisponibles = _context.Produits.Where(p => !(p.PanierId.Equals(panier.PanierId))).ToList();
-            List<Service> servicesDisponibles = _context.Services.Where(s => !(s.PanierId.Equals(panier.PanierId))).ToList();
+            List<Produit> produitsDisponibles = _context.Produits.Where(p => p.PanierId.Equals(1)).ToList();
+            List<Service> servicesDisponibles = _context.Services.Where(s => s.PanierId.Equals(1)).ToList();
 
-            Debug.WriteLine("Login du client " + compte.NomCompte);
+
 
             // Le modèle est parfois incomplet après les redémarrage, donc mieux vaux calculer le total du panier direct dans le controller
             int totalPanier = 0;
@@ -302,13 +303,63 @@ namespace GestionRelationClient.Controllers
             });
 
 
+            // Si le client a précisé une string, on ne sort que les éléments dont le nom possède cette string
+            if(!(String.IsNullOrEmpty(stringRecherchee) || String.IsNullOrWhiteSpace(stringRecherchee)))
+            {
+
+                List<Article> articleDansPanier_newList = new List<Article>();
+                articleDansPanier.ForEach(article =>
+                {
+                    if (article.Nom.ToLower().Contains(stringRecherchee.ToLower()))
+                    {
+                        articleDansPanier_newList.Add(article);
+                    }
+                });
+                articleDansPanier = articleDansPanier_newList;
+
+                List<Produit> produitsDisponibles_newList = new List<Produit>();
+                produitsDisponibles.ForEach(article =>
+                {
+                    if (article.Nom.ToLower().Contains(stringRecherchee.ToLower()))
+                    {
+                        produitsDisponibles_newList.Add(article);
+                    }
+                });
+                produitsDisponibles = produitsDisponibles_newList;
+
+                List<Service> servicesDisponibles_newList = new List<Service>();
+                servicesDisponibles.ForEach(article =>
+                {
+                    if (article.Nom.ToLower().Contains(stringRecherchee.ToLower()))
+                    {
+                        servicesDisponibles_newList.Add(article);
+                    }
+                });
+                servicesDisponibles = servicesDisponibles_newList;
+            }
+
+
             ViewData["Panier"] = articleDansPanier;
             ViewData["Produit"] = produitsDisponibles;
             ViewData["Service"] = servicesDisponibles;
             ViewData["PrixTotal"] = totalPanier;
+            // Permet d'affiche un message d'erreur (utilisé si on a tenté de générer un facture avec un solde trop bas
+            ViewData["ErreurSolde"] = erreurSolde;
 
             return View(compte);
         }
+
+        [HttpPost]
+        public IActionResult InterfaceClient(IFormCollection recherche)
+        {
+            String stringRecherchee = recherche["StringRecherchee"];
+
+            Debug.WriteLine("Post string recherchée : " + stringRecherchee);
+
+
+            return RedirectToAction("InterfaceClient", new { CompteId = Int32.Parse(recherche["CompteId"]), stringRecherchee = stringRecherchee });
+        }
+
 
         /* -------- Ajout article au panier -------- */
         [HttpPost]
@@ -320,7 +371,7 @@ namespace GestionRelationClient.Controllers
             panier.AjoutArticle(article);
             _context.SaveChanges();
 
-            return RedirectToAction("InterfaceClient", new { CompteId = panier.CompteId });
+            return RedirectToAction("InterfaceClient", new { CompteId = panier.CompteId, stringRecherchee = "" });
         }
 
         /* -------- Ajout article au panier -------- */
@@ -333,10 +384,58 @@ namespace GestionRelationClient.Controllers
             panier.SupprimerPanierArticle(article);
             _context.SaveChanges();
 
-            return RedirectToAction("InterfaceClient", new { CompteId = panier.CompteId });
+            return RedirectToAction("InterfaceClient", new { CompteId = panier.CompteId, stringRecherchee = "" });
         }
 
+        [HttpPost]
+        public IActionResult GenererFacture(IFormCollection factureGeneration)
+        {
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(Int32.Parse(factureGeneration["CompteId"]))).FirstOrDefault();
+            Panier panier = _context.Paniers.Where(p => p.CompteId.Equals(compte.CompteId)).FirstOrDefault();
+            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(compte.ClientId)).FirstOrDefault();
 
+            List<Article> articlesDansPanier = _context.Articles.Where(a => a.PanierId.Equals(panier.PanierId)).ToList();
+            
+
+            int montantTotal = 0;
+            articlesDansPanier.ForEach(article =>
+            {
+                montantTotal += article.Prix;
+            });
+
+
+            if(montantTotal > client.Solde)
+            {
+                return RedirectToAction("InterfaceClient", new { CompteId = compte.CompteId, stringRecherchee = "", erreurSolde = true });
+            } else
+            {
+                Facture facture = new Facture()
+                {
+                    Compte = compte,
+                    DateEmission = DateTime.Now,
+                    Montant = montantTotal
+                };
+                _context.Factures.Add(facture);
+
+                // On retire les articles du panier
+                articlesDansPanier.ForEach(article =>
+                {
+                    panier.SupprimerPanierArticle(article);
+                });
+
+                // Le gestionnaire associé gagne 15% du montant total
+                Gestionnaire gestionnaireAssocie = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(client.GestionnaireAssocieId)).FirstOrDefault();
+                gestionnaireAssocie.ajoutFacture(facture);
+
+                // On réduit évidemment le solde du client
+                client.GenererFacture(facture);
+
+                _context.SaveChanges();
+
+                return RedirectToAction("InterfaceClient", new { CompteId = compte.CompteId, stringRecherchee = "" });
+            }
+
+        }
 
 
 
@@ -356,7 +455,7 @@ namespace GestionRelationClient.Controllers
                 case "GestionRelationClient.Models.Service":
                     return RedirectToAction("DetailsService", new { CompteId = CompteId, ArticleId = ArticleId });
                 default:
-                    return RedirectToAction("InterfaceClient", new { CompteId = CompteId });
+                    return RedirectToAction("InterfaceClient", new { CompteId = CompteId, stringRecherchee = "" });
             }
         }
         [HttpGet]
@@ -427,7 +526,22 @@ namespace GestionRelationClient.Controllers
             client.AjoutSolde(Int32.Parse(ajout["Montant"]));
             _context.SaveChanges();
 
-            return RedirectToAction("SoldeClient", new { CompteId = compte.CompteId });
+            return RedirectToAction("SoldeClient", new { CompteId = compte.CompteId, stringRecherchee = "" });
+        }
+
+
+
+
+
+        /* -------- Liste des factures -------- */
+        [HttpGet]
+        public IActionResult ListeFactures(int CompteId)
+        {
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+            List<Facture> factures= _context.Factures.Where(f => f.CompteId.Equals(compte.CompteId)).ToList();
+
+            ViewData["Factures"] = factures;
+            return View(compte);
         }
 
 
@@ -435,15 +549,17 @@ namespace GestionRelationClient.Controllers
 
 
 
-
-
-
-
+        [HttpGet]
         public IActionResult OuvrirTicketSupport(int CompteId, int ArticleId)
         {
             Debug.WriteLine("Ouverture d'un ticket support pour " + ArticleId + " de la part de " + CompteId);
 
-            return RedirectToAction("InterfaceClient", new { CompteId = CompteId });
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+            Article article = _context.Articles.Where(a => a.ArticleId.Equals(ArticleId)).FirstOrDefault();
+
+            ViewData["Article"] = article;
+
+            return View(compte);
         }
     }
 }

@@ -29,52 +29,10 @@ namespace GestionRelationClient.Models
             ClientsAssocies = new List<Client>();
         }
 
-        // TODO
-        public void AjouterStock()
+        // Gagne 15% du montant de la facture
+        public void ajoutFacture(Facture facture)
         {
-
-        }
-
-        // TODO
-        public void ModifierStock()
-        {
-
-        }
-
-        // TODO
-        public void SupprimerStock()
-        {
-
-        }
-
-        // TODO
-        public void AjoutArticle()
-        {
-
-        }
-
-        // TODO
-        public void SupprimerArticle()
-        {
-
-        }
-
-        // TODO
-        public void ModifierArticle()
-        {
-
-        }
-
-        // TODO
-        public void AjouterRole()
-        {
-
-        }
-
-        // TODO
-        public void ChangerRole()
-        {
-
+            Gain += (int)(facture.Montant*0.15);
         }
 
         public void SupprimerRole()

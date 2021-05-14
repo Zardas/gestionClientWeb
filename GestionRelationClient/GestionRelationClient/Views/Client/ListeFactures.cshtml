@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_LayoutClient";
+    ViewBag.Title = "";
+}
+@using GestionRelationClient.Models
+@{
+    List<Facture> factures = ViewData["Factures"] as List<Facture>;
+}
+<!-- From : https://www.completecsharptutorial.com/asp-net-mvc5/pass-data-using-viewbag-viewdata-and-tempdata-in-asp-net-mvc-5.php -->
+
+@model GestionRelationClient.Models.Compte
+
+
+<div class="interfaceGestionnaire">
+    <h3>Liste des factures</h3>
+
+    <div id="listeFactures">
+        @foreach (GestionRelationClient.Models.Facture facture in factures)
+        {
+            <div class="formSelectionClient">
+                <partial name="_Facture" model="facture" />
+            </div>
+        }
+    </div>
+</div>

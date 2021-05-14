@@ -65,6 +65,11 @@ namespace GestionRelationClient.Models
             this.Solde += montant;
         }
 
+        public void GenererFacture(Facture facture)
+        {
+            this.Solde -= facture.Montant;
+        }
+
         public void ModifierProfil(string nouveauLogin, string nouveauMail, string nouveauNom, string nouveauPrenom, string nouveauMotDePasse, string nouveauTelephone, int nouveauAge)
         {
             if(nouveauLogin != "")
