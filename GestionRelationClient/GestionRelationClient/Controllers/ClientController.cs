@@ -26,8 +26,24 @@ namespace GestionRelationClient.Controllers
 
         /* -------- ConnectClient -------- */
         [HttpGet]
-        public IActionResult ConnectClient()
+        public IActionResult ConnectClient(bool erreurConnexion)
         {
+            /*Debug.WriteLine(erreurConnexion);
+
+            if(!erreurConnexion)
+            {
+                erreurConnexion = false;
+            }*/
+
+            if(erreurConnexion)
+            {
+                Debug.WriteLine("Erreur à la connexion");
+            } else
+            {
+                Debug.WriteLine("Pas d'erreur à la connexion");
+            }
+            ViewData["ErreurConnexion"] = erreurConnexion;
+
             return View();
         }
 
@@ -58,14 +74,13 @@ namespace GestionRelationClient.Controllers
                         case "GestionRelationClient.Models.Administrateur":
                             return RedirectToAction("InterfaceAdministrateur", "Administrateur", utilisateurATrouver);
                         default:
-                            return View();
+                            return RedirectToAction("ConnectClient", "Client", new { erreurConnexion = true });
                     }
 
                 }
             }
 
-
-            return View();
+            return RedirectToAction("ConnectClient", "Client", new { erreurConnexion = true });
         }
 
 

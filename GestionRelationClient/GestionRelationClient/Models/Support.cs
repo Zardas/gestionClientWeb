@@ -36,6 +36,10 @@ namespace GestionRelationClient.Models
             this.Status = "Ouvert";
         }
 
-
+        public void Resoudre(string resolution)
+        {
+            this.Resolution = resolution;
+            this.Status = "Resolu";
+        }
     }
 }

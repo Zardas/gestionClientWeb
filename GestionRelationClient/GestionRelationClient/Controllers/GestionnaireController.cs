@@ -363,5 +363,69 @@ namespace GestionRelationClient.Controllers
 
             return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = Int32.Parse(abonnementEnvoye["GestionnaireId"])});
         }
+
+
+
+
+
+
+
+        [HttpGet]
+        public IActionResult ListeTicketsGestionnaire(int IdGestionnaire)
+        {
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+
+
+            List<Client> clients = _context.Clients.Where(c => c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId)).ToList();
+
+            // Liste de tout les comptes associés
+            List<Compte> comptes = new List<Compte>();
+            clients.ForEach(client =>
+            {
+                List<Compte> comptesDuClient = _context.Comptes.Where(c => c.ClientId.Equals(client.UtilisateurId)).ToList();
+                comptesDuClient.ForEach(compte =>
+                {
+                    comptes.Add(compte);
+                });
+
+            });
+
+
+            List<Support> supportsAssocies = new List<Support>();
+
+            comptes.ForEach(compte =>
+            {
+                List<Support> supports = _context.Supports.Where(s => s.CompteId.Equals(compte.CompteId)).ToList();
+
+                supports.ForEach(support =>
+                {
+                    supportsAssocies.Add(support);
+                });
+                
+            });
+            
+            ViewData["Supports"] = supportsAssocies;
+
+            return View(gestionnaire);
+        }
+
+        [HttpPost]
+        public IActionResult ResoudreTicket(IFormCollection resolutionEnvoyee)
+        {
+            
+            int GestionnaireId = Int32.Parse(resolutionEnvoyee["GestionnaireId"]);
+            int SupportId = Int32.Parse(resolutionEnvoyee["SupportId"]);
+
+            Debug.WriteLine("Résolution du ticket n°" + SupportId);
+
+            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(GestionnaireId)).FirstOrDefault();
+
+            Support support = _context.Supports.Where(s => s.SupportId.Equals(SupportId)).FirstOrDefault();
+
+            support.Resoudre(resolutionEnvoyee["Resolution"]);
+            _context.SaveChanges();
+
+            return RedirectToAction("ListeTicketsGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+        }
     }
 }

@@ -61,7 +61,10 @@ nav .menu {
     flex-wrap: wrap;
     justify-content: space-around;
 }
-
+.identifiantsInvalides {
+    color: red;
+    margin-top: 5px;
+}
 
 
 
@@ -231,7 +234,14 @@ nav .menu {
             background-color: rgb(220 220 220);
         }
 
-
+.resolutionTicket {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.resolutionTicket textarea {
+    width: 60%;
+    margin-bottom: 10px;
+}
 
 
 

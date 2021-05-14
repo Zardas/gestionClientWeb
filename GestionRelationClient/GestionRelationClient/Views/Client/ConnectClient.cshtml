@@ -28,10 +28,13 @@
                 </div>
             </div>
 
-
-
             <button type="submit" class="btn btn-primary toHorizontalyCenter">Se connecter</button>
-        }
+
+            @if (ViewData["ErreurConnexion"].ToString() == "True")
+                {
+                <p class="identifiantsInvalides">Identifiants invalides</p>
+                }
+            }
     </div>
 
 
