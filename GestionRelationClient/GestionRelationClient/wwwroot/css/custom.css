@@ -66,6 +66,9 @@ nav .menu {
     margin-right: 10%;
     text-align: center;
 }
+.listeComptesClient h2 {
+    margin-bottom: 20px;
+}
 .lienVersModifications {
     display: flex;
     justify-content: right;
@@ -96,8 +99,11 @@ nav .menu {
 
 
 
-
-
+/* ---- InterfaceClient ---- */
+.bienvenueInterfaceClient {
+    display: flex;
+    justify-content: space-between;
+}
 
 
 
@@ -154,27 +160,33 @@ nav .menu {
     display: flex;
     justify-content: space-between;
     background-color: rgb(235 235 235);
-    height: 60px;
+    height: 50px;
 }
 .formSelectionClient:hover {
     background-color: rgb(220 220 220);
 }
+
     .formSelectionClient h4 {
         font-size: 12px;
         vertical-align: middle;
-        height: 60px;
-        line-height: 60px;
+        height: 50px;
+        line-height: 50px;
+        color: rgb(36,32,31);
+        text-decoration: none;
+    }
+    .formSelectionClient h4:hover {
+        text-decoration: none;
     }
     .formSelectionClient .buttons {
         display: flex;
         justify-content: right;
     }
     .formSelectionClient .buttons button, .formSelectionClient .buttons a {
-        height: 60px;
+        height: 50px;
         padding: 0;
     }
         .formSelectionClient .buttons button img, .formSelectionClient .buttons a img {
-            height: 60px;
+            height: 50px;
             margin: 0;
         }
 

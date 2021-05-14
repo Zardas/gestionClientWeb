@@ -165,7 +165,6 @@ namespace GestionRelationClient.Controllers
                 if (compteATrouver == null)
                 {
 
-
                     Compte newCompte = new Compte() { ClientId = client.UtilisateurId, DateCreation = System.DateTime.Now, NomCompte = nouveauCompte["NomRole"] };
                     Panier newPanier = new Panier() { Compte = newCompte };
 
@@ -286,11 +285,122 @@ namespace GestionRelationClient.Controllers
         public IActionResult InterfaceClient(int CompteId)
         {
             Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+            Panier panier = _context.Paniers.Where(p => p.CompteId.Equals(compte.CompteId)).FirstOrDefault();
+
+            List<Article> articleDansPanier = _context.Articles.Where(a => a.PanierId.Equals(panier.PanierId)).ToList();
+
+            List<Produit> produitsDisponibles = _context.Produits.Where(p => !(p.PanierId.Equals(panier.PanierId))).ToList();
+            List<Service> servicesDisponibles = _context.Services.Where(s => !(s.PanierId.Equals(panier.PanierId))).ToList();
 
             Debug.WriteLine("Login du client " + compte.NomCompte);
 
-            //ViewData["Compte"] = compte;
+            // Le modèle est parfois incomplet après les redémarrage, donc mieux vaux calculer le total du panier direct dans le controller
+            int totalPanier = 0;
+            articleDansPanier.ForEach(a =>
+            {
+                totalPanier += a.Prix;
+            });
+
+
+            ViewData["Panier"] = articleDansPanier;
+            ViewData["Produit"] = produitsDisponibles;
+            ViewData["Service"] = servicesDisponibles;
+            ViewData["PrixTotal"] = totalPanier;
+
             return View(compte);
+        }
+
+        /* -------- Ajout article au panier -------- */
+        [HttpPost]
+        public IActionResult AjoutPanierArticle(IFormCollection articleEnvoye)
+        {
+            Panier panier = _context.Paniers.Where(p => p.CompteId.Equals(Int32.Parse(articleEnvoye["CompteId"]))).FirstOrDefault();
+            Article article = _context.Articles.Where(a => a.ArticleId.Equals(Int32.Parse(articleEnvoye["ArticleId"]))).FirstOrDefault();
+
+            panier.AjoutArticle(article);
+            _context.SaveChanges();
+
+            return RedirectToAction("InterfaceClient", new { CompteId = panier.CompteId });
+        }
+
+        /* -------- Ajout article au panier -------- */
+        [HttpPost]
+        public IActionResult EnlevementPanierArticle(IFormCollection articleEnvoye)
+        {
+            Panier panier = _context.Paniers.Where(p => p.CompteId.Equals(Int32.Parse(articleEnvoye["CompteId"]))).FirstOrDefault();
+            Article article = _context.Articles.Where(a => a.ArticleId.Equals(Int32.Parse(articleEnvoye["ArticleId"]))).FirstOrDefault();
+
+            panier.SupprimerPanierArticle(article);
+            _context.SaveChanges();
+
+            return RedirectToAction("InterfaceClient", new { CompteId = panier.CompteId });
+        }
+
+
+
+
+
+        /* -------- Accéder aux détails d'un article -------- */
+        [HttpGet]
+        public IActionResult DetailsArticle(int CompteId, int ArticleId)
+        {
+            Debug.WriteLine("Détails de l'article n°" + ArticleId + " pour le compte n°" + CompteId);
+
+            Article article = _context.Articles.Where(a => a.ArticleId.Equals(ArticleId)).FirstOrDefault();
+
+            switch(article.GetType().ToString())
+            {
+
+                case "GestionRelationClient.Models.Produit":
+                    return RedirectToAction("DetailsProduit", new { CompteId = CompteId, ArticleId = ArticleId });
+                case "GestionRelationClient.Models.Service":
+                    return RedirectToAction("DetailsService", new { CompteId = CompteId, ArticleId = ArticleId });
+                default:
+                    return RedirectToAction("InterfaceClient", new { IdCompte = CompteId });
+            }
+        }
+        [HttpGet]
+        public IActionResult DetailsProduit(int CompteId, int ArticleId)
+        {
+            Debug.WriteLine("Détails du produit n°" + ArticleId + " pour le compte n°" + CompteId);
+
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+
+            Produit article = _context.Produits.Where(p => p.ArticleId.Equals(ArticleId)).FirstOrDefault();
+
+            ViewData["Produit"] = article;
+
+            // On indique à la vue si le produit peut être acheté pour qu'elle affiche ou non le bouton d'achat
+            Panier panier = _context.Paniers.Where(p => p.CompteId.Equals(compte.CompteId)).FirstOrDefault();
+            ViewData["PeutEtreAchete"] = !(article.PanierId.Equals(panier.PanierId));
+
+            return View(compte);
+        }
+        [HttpGet]
+        public IActionResult DetailsService(int CompteId, int ArticleId)
+        {
+            Debug.WriteLine("Détails du service n°" + ArticleId + " pour le compte n°" + CompteId);
+
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+            Service article = _context.Services.Where(s => s.ArticleId.Equals(ArticleId)).FirstOrDefault();
+
+            ViewData["Service"] = article;
+
+            // On indique à la vue si le service peut être acheté pour qu'elle affiche ou non le bouton d'achat
+            Panier panier = _context.Paniers.Where(p => p.CompteId.Equals(compte.CompteId)).FirstOrDefault();
+            ViewData["PeutEtreAchete"] = !(article.PanierId.Equals(panier.PanierId));
+
+            return View(compte);
+        }
+
+
+
+
+        public IActionResult OuvrirTicketSupport(int CompteId, int ArticleId)
+        {
+            Debug.WriteLine("Ouverture d'un ticket support pour " + ArticleId + " de la part de " + CompteId);
+
+            return RedirectToAction("InterfaceClient", new { CompteId = CompteId });
         }
     }
 }

@@ -435,3 +435,7 @@ C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\g
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ServiceSmall.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Gestionnaire\ModificationProduit.cshtml.g.cs
 C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Gestionnaire\ModificationService.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ArticleSmall.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LayoutClient.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Client\DetailsProduit.cshtml.g.cs
+C:\Users\Antoine\Desktop\Scolaire\Master2Uqar\Programmation objet avancée\TP3\gestionClientWeb\GestionRelationClient\GestionRelationClient\obj\Debug\netcoreapp3.1\Razor\Views\Client\DetailsService.cshtml.g.cs

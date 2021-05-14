@@ -44,10 +44,12 @@ namespace GestionRelationClient.Models
             return this.Articles;
         }
 
-        // TODO
-        public void SupprimerPanierArticle()
-        {
 
+        public void SupprimerPanierArticle(Article article)
+        {
+            // Le panier 1 est le panier nul défaut
+            article.PanierId = 1;
+            this.Articles.Remove(article);
         }
 
         public int getPrixTotal()

@@ -5,4 +5,13 @@
 }
 
 @model GestionRelationClient.Models.Produit
-<h4>[@Model.Prix $] @Model.Nom (@Model.Quantite disponibles)</h4>
+<h4>[@Model.Prix $] @Model.Nom (@Model.Quantite
+    @if (Model.Quantite > 1)
+    {
+       <span> disponibles)</span>
+    }
+    else
+    {
+        <span> disponible)</span>
+    }
+</h4>
