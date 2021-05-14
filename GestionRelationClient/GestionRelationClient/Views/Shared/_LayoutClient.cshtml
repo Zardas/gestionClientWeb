@@ -26,6 +26,7 @@
             @model GestionRelationClient.Models.Compte
             <a class="menuLink" asp-controller="Client" asp-action="InterfaceClient" asp-route-CompteId="@Model.CompteId" asp-route-stringRecherchee="" role="button">Menu</a>
             <a class="menuLink" asp-controller="Client" asp-action="ListeFactures" asp-route-CompteId="@Model.CompteId" role="button">Mes factures</a>
+            <a class="menuLink" asp-controller="Client" asp-action="ListeTicketsClient" asp-route-CompteId="@Model.CompteId" role="button">Mes tickets</a>
             <a class="menuLink" asp-controller="Client" asp-action="SoldeClient" asp-route-CompteId="@Model.CompteId" role="button">Mon solde</a>
         </div>
     </nav>

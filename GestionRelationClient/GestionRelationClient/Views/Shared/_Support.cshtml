@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model GestionRelationClient.Models.Support
+
+<div class="ticketSupport">
+    <div class="topDetails">
+        <p>Crée le @Model.DateCreation</p>
+        @if (Model.Status == "Ouvert")
+        {
+            <p class="EnCours">Toujours en cours</p>
+        } else
+        {
+            <p class="Resolu">Résolu</p>
+        }
+    </div>
+
+    <h5>Objet : @Model.Objet</h5>
+    
+    <div>
+        <p>Description</p>
+        <p class="longText">@Model.Description</p>
+    </div>
+
+    @if (Model.Status == "Resolu")
+    {
+        <div>
+            <p>Message résolution</p>
+            <p class="longText">@Model.Resolution</p>
+        </div>
+    }
+    
+</div>

@@ -526,7 +526,7 @@ namespace GestionRelationClient.Controllers
             client.AjoutSolde(Int32.Parse(ajout["Montant"]));
             _context.SaveChanges();
 
-            return RedirectToAction("SoldeClient", new { CompteId = compte.CompteId, stringRecherchee = "" });
+            return RedirectToAction("SoldeClient", new { CompteId = compte.CompteId });
         }
 
 
@@ -559,6 +559,42 @@ namespace GestionRelationClient.Controllers
 
             ViewData["Article"] = article;
 
+            return View(compte);
+        }
+
+        [HttpPost]
+        public IActionResult AjouterTicketSupport(IFormCollection ticketAouvrir)
+        {
+            int CompteId = Int32.Parse(ticketAouvrir["CompteId"]);
+            int ArticleId = Int32.Parse(ticketAouvrir["ArticleId"]);
+
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+            Article article = _context.Articles.Where(a => a.ArticleId.Equals(ArticleId)).FirstOrDefault();
+
+
+            Support support = new Support(article)
+            {
+                Objet = ticketAouvrir["Objet"],
+                Description = ticketAouvrir["Description"],
+                DateCreation = DateTime.Now,
+                Compte = compte,
+            };
+            _context.Supports.Add(support);
+            _context.SaveChanges();
+
+            return RedirectToAction("InterfaceClient", new { CompteId = CompteId, stringRecherchee = "" });
+        }
+
+
+
+
+        [HttpGet]
+        public IActionResult ListeTicketsClient(int CompteId)
+        {
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+            List<Support> supports = _context.Supports.Where(s => s.CompteId.Equals(CompteId)).ToList();
+
+            ViewData["Supports"] = supports;
             return View(compte);
         }
     }

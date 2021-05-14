@@ -13,4 +13,25 @@
 
 @model GestionRelationClient.Models.Compte
 
-<h3>Ouverture d'un ticket par @Model.NomCompte pour l'article @article.Nom</h3>
+
+<div class="ouvertureTicketSupport">
+
+    <h3>Ouverture d'un ticket par @Model.NomCompte pour l'article @article.Nom</h3>
+    @using (Html.BeginForm("AjouterTicketSupport", "Client", FormMethod.Post))
+    {
+        @Html.Hidden("CompteId", Model.CompteId)
+        @Html.Hidden("ArticleId", article.ArticleId)
+        <div>
+            <label for="Objet">Objet</label>
+            <input type="text" name="Objet" class="form-control" required />
+        </div>
+
+        <div>
+            <label for="Description">Description</label>
+            <textarea type="text" name="Description" class="form-control" placeholder="Decrivez votre problème" required></textarea>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Créer le ticket</button>
+    }
+</div>
