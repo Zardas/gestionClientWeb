@@ -356,7 +356,7 @@ namespace GestionRelationClient.Controllers
                 case "GestionRelationClient.Models.Service":
                     return RedirectToAction("DetailsService", new { CompteId = CompteId, ArticleId = ArticleId });
                 default:
-                    return RedirectToAction("InterfaceClient", new { IdCompte = CompteId });
+                    return RedirectToAction("InterfaceClient", new { CompteId = CompteId });
             }
         }
         [HttpGet]
@@ -390,8 +390,51 @@ namespace GestionRelationClient.Controllers
             Panier panier = _context.Paniers.Where(p => p.CompteId.Equals(compte.CompteId)).FirstOrDefault();
             ViewData["PeutEtreAchete"] = !(article.PanierId.Equals(panier.PanierId));
 
+            // On passe aussi la durée de l'abonnement à la vue s'il existe
+            Abonnement abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(article.AbonnementId)).FirstOrDefault();
+            ViewData["DureeAbonnement"] = abonnement.DureeAbonnement;
+
             return View(compte);
         }
+
+
+
+
+
+
+
+
+
+
+
+        /* -------- Accéder au solde -------- */
+        [HttpGet]
+        public IActionResult SoldeClient(int CompteId)
+        {
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(CompteId)).FirstOrDefault();
+            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(compte.ClientId)).FirstOrDefault();
+
+            ViewData["Client"] = client;
+
+            return View(compte);
+        }
+        [HttpPost]
+        public IActionResult SoldeClient(IFormCollection ajout)
+        {
+            Compte compte = _context.Comptes.Where(c => c.CompteId.Equals(Int32.Parse(ajout["CompteId"]))).FirstOrDefault();
+            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(compte.ClientId)).FirstOrDefault();
+
+            client.AjoutSolde(Int32.Parse(ajout["Montant"]));
+            _context.SaveChanges();
+
+            return RedirectToAction("SoldeClient", new { CompteId = compte.CompteId });
+        }
+
+
+
+
+
+
 
 
 

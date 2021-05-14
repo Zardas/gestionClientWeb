@@ -15,8 +15,44 @@
 
 <div class="detailsArticle">
 
-    <h3>Produit : @article.Nom</h3>
+    <div class="row">
+        <div class="row">
+            <img src="@article.Image" alt="@article.Nom" />
 
-    <span>Peut être acheté : @ViewData["PeutEtreAchete"]</span>
+            <div class="column">
+                <h3>@article.Nom</h3>
+                <p>Type : @article.Type</p>
+                <p>Fabricant : @article.Fabricant</p>
+                <p>Capacité : @article.Capacite</p>
+            </div>
+        </div>
+        
+        
+        <div class="column">
+            <h5 class="prix">@article.Prix $</h5>
+            @if (ViewData["PeutEtreAchete"].ToString() == "True")
+            {
+                @using (Html.BeginForm("AjoutPanierArticle", "Client", FormMethod.Post))
+                {
+                    @Html.Hidden("CompteId", Model.CompteId)
+                    @Html.Hidden("ArticleId", article.ArticleId)
+                    <button type="submit" class="btn btn-primary">Ajouter ce produit au panier</button>
+                }
+            }
+        </div>
+
+    </div>
+
+    <div class="row row-longTexts">
+        <div class="column">
+            <h5>Description</h5>
+            <p class="longText">@article.Description</p>
+        </div>
+        <div class="column">
+            <h5>Manuel</h5>
+            <p class="longText">@article.Manuel</p>
+        </div>
+    </div>
+
 
 </div>

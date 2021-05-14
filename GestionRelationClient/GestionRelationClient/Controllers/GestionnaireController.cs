@@ -251,6 +251,7 @@ namespace GestionRelationClient.Controllers
             {
                 Nom = service["Nom"],
                 Image = service["Image"],
+                Type = service["Type"],
                 Prix = Int32.Parse(service["Prix"]),
                 Description = service["Description"],
                 Manuel = service["Manuel"],

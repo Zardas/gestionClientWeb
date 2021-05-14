@@ -39,6 +39,11 @@ nav .menu {
 
 
 
+/*------------------------------------------------------------------------------------------------------*/
+/*                                            Partie Client                                             */
+/*------------------------------------------------------------------------------------------------------*/
+
+
 /* ---- Connexion et inscription client ---- */
 .connectClient, .inscriptionClient {
     text-align: center;
@@ -105,9 +110,45 @@ nav .menu {
     justify-content: space-between;
 }
 
+/* ----DétailsArticle ---- */
+.detailsArticle {
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.detailsArticle .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.detailsArticle .row .row .column {
+    display: flex;
+    flex-direction: column;
+}
+.detailsArticle .row img {
+    height: 150px;
+    width: 200px;
+}
+    .detailsArticle .row-longTexts .column {
+        width: 30%;
+    }
 
+        .prix {
+            text-align: right;
+        }
 
-
+/* ---- Ajout Solde ---- */
+.ajoutSolde {
+    margin-top: 40px;
+    width: 30%;
+}
+.ajoutSolde input {
+    margin-bottom: 20px;
+}
 
 
 

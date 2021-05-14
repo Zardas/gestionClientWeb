@@ -60,6 +60,10 @@ namespace GestionRelationClient.Models
 
         }
 
+        public void AjoutSolde(int montant)
+        {
+            this.Solde += montant;
+        }
 
         public void ModifierProfil(string nouveauLogin, string nouveauMail, string nouveauNom, string nouveauPrenom, string nouveauMotDePasse, string nouveauTelephone, int nouveauAge)
         {
