@@ -72,7 +72,7 @@ namespace GestionRelationClient.Controllers
                         case "GestionRelationClient.Models.Gestionnaire":
                             return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = utilisateurATrouver.UtilisateurId });
                         case "GestionRelationClient.Models.Administrateur":
-                            return RedirectToAction("InterfaceAdministrateur", "Administrateur", utilisateurATrouver);
+                            return RedirectToAction("InterfaceAdministrateur", "Administrateur", new { IdAdministrateur = utilisateurATrouver.UtilisateurId });
                         default:
                             return RedirectToAction("ConnectClient", "Client", new { erreurConnexion = true });
                     }

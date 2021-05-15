@@ -3,6 +3,12 @@
 *@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    Layout = "_Layout";
+    Layout = "_LayoutAdministrateur";
     ViewBag.Title = "Interface administrateur";
 }
+
+@model GestionRelationClient.Models.Administrateur
+
+<div class="interfaceAdministrateur">
+    <h2>@Model.NomAdministrateur</h2>
+</div>

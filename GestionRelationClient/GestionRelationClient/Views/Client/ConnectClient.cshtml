@@ -8,6 +8,9 @@
 }
 
 <div class="connectClient">
+
+    <h1>Connexion</h1>
+
     <div class="formInscriptionClient">
         @using (Html.BeginForm("ConnectClient", "Client", FormMethod.Post))
         {
@@ -31,10 +34,10 @@
             <button type="submit" class="btn btn-primary toHorizontalyCenter">Se connecter</button>
 
             @if (ViewData["ErreurConnexion"].ToString() == "True")
-                {
+            {
                 <p class="identifiantsInvalides">Identifiants invalides</p>
-                }
             }
+        }
     </div>
 
 

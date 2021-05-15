@@ -4,7 +4,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "_LayoutGestionnaire";
-    ViewBag.Title = "";
+    ViewBag.Title = "Interface Gestionnaire";
 }
 @using GestionRelationClient.Models
 @{
@@ -15,7 +15,10 @@
 @model GestionRelationClient.Models.Gestionnaire
 
 <div class="interfaceGestionnaire">
-    <h2>Bienvenue @Model.NomGestionnaire</h2>
+    <div class="bienvenueInterfaceClient">
+        <h2>Connecté sous @Model.NomGestionnaire</h2>
+        <div>Gain : @Model.Gain</div>
+    </div>
 
     <div class="lists">
         <!-- Liste des clients associés -->

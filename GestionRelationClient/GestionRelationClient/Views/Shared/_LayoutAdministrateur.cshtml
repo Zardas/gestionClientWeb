@@ -19,13 +19,12 @@
 
     <!-- HEADER -->
     <nav>
-        <div class="acceuil">
-            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
+        <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
+        <div class="menu">
+            @model GestionRelationClient.Models.Administrateur
+            <a class="menuLink" asp-controller="Administrateur" asp-action="InterfaceAdministrateur" asp-route-IdAdministrateur="@Model.UtilisateurId" role="button">Menu</a>
+
         </div>
-        <!--<div class="menu">
-            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Client</a>
-            <a class="menuLink" asp-controller="Gestionnaire" asp-action="ConnectGestionnaire" role="button">Gestionnaire</a>
-        </div>-->
     </nav>
 
     @RenderBody()
