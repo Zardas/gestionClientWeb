@@ -218,6 +218,7 @@ namespace GestionRelationClient.Controllers
                     PanierId = 1 // Le panier nul
                 };
 
+                Debug.Write("FLAG A");
                 _context.Produits.Add(produitAajouter);
                 _context.SaveChanges();
 
@@ -349,8 +350,6 @@ namespace GestionRelationClient.Controllers
             }
             else
             {
-                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
-
 
                 Abonnement abonnement;
                 // Un abonnement peut ou non être lié à un abonnement
@@ -589,8 +588,6 @@ namespace GestionRelationClient.Controllers
             }
             else
             {
-
-                int GestionnaireId = Int32.Parse(resolutionEnvoyee["GestionnaireId"]);
                 int SupportId = Int32.Parse(resolutionEnvoyee["SupportId"]);
 
                 Debug.WriteLine("Résolution du ticket n°" + SupportId);

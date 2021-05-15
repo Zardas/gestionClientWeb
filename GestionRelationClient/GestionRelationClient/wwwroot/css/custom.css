@@ -19,13 +19,13 @@ nav {
 .navClient a, .navGestionnaire a {
     color: rgb(36 31 32);
 }
-.navClient a:hover, .navGestionnaire a:hover {
+.navClient a:hover, .navAdministrateur a:hover {
     color: black;
 }
-.navGestionnaire {
+.navAdministrateur {
     background-color: #f09537
 }
-.navAdministrateur {
+.navGestionnaire {
     background-color: #fe3636;
 }
 nav .acceuil {
@@ -175,7 +175,7 @@ nav .menu {
 }
 .detailsArticle .row img {
     height: 150px;
-    width: 200px;
+    width: 150px;
 }
     .detailsArticle .row-longTexts .column {
         width: 30%;
