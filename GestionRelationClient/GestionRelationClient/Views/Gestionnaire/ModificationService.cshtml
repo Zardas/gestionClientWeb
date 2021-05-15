@@ -21,7 +21,6 @@
     <div class="ajoutArticle">
         @using (Html.BeginForm("ModifierService", "Gestionnaire", FormMethod.Post))
         {
-            @Html.Hidden("GestionnaireId", Model.UtilisateurId)
             @Html.Hidden("ServiceId", service.ArticleId)
             <div class="form-group">
                 <div>
@@ -29,7 +28,7 @@
                     <input type="text" name="Nom" class="form-control" value="@service.Nom" required />
                 </div>
                 <div>
-                    <label for="Image">Image (à placer dans "wwwwroot/img/articles/")</label>
+                    <label for="Image">Image</label>
                     <input type="text" name="Image" class="form-control" value="@service.Image" required />
                 </div>
                 <div>

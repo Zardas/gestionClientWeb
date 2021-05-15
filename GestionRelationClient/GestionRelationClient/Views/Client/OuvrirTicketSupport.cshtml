@@ -19,7 +19,6 @@
     <h3>Ouverture d'un ticket par @Model.NomCompte pour l'article @article.Nom</h3>
     @using (Html.BeginForm("AjouterTicketSupport", "Client", FormMethod.Post))
     {
-        @Html.Hidden("CompteId", Model.CompteId)
         @Html.Hidden("ArticleId", article.ArticleId)
         <div>
             <label for="Objet">Objet</label>

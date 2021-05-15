@@ -36,7 +36,6 @@
             {
                 @using (Html.BeginForm("AjoutPanierArticle", "Client", FormMethod.Post))
                 {
-                    @Html.Hidden("CompteId", Model.CompteId)
                     @Html.Hidden("ArticleId", article.ArticleId)
                     <button type="submit" class="btn btn-primary">Ajouter ce produit au panier</button>
                 }

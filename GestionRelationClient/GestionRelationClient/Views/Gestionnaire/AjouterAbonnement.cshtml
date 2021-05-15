@@ -14,7 +14,6 @@
     <div class="ajoutArticle">
         @using (Html.BeginForm("AjouterAbonnement", "Gestionnaire", FormMethod.Post))
         {
-            @Html.Hidden("GestionnaireId", Model.UtilisateurId)
             <div class="form-group">
                 <div>
                     <label for="Duree">Duree en mois</label>

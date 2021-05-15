@@ -15,19 +15,16 @@
 <div class="listeComptesClient">
 
     <p class="lienRetour">
-        <a class="btn btn-link" asp-action="ListeComptesClient" asp-route-ClientId="@client.UtilisateurId" role="button">< Retour</a>
+        <a class="btn btn-link" asp-action="ListeComptesClient" role="button">< Retour</a>
     </p>
 
-    <h2>Bienvenue @client.Prenom</h2>
-
-
+    <h2>Bienvenue @client.Login</h2>
 
 
 
     @using (Html.BeginForm("ModificationCompteClient", "Client", FormMethod.Post))
     {
         <div class="formInscriptionClient">
-            @Html.Hidden("ClientId", client.UtilisateurId)
 
             <div class="form-group">
                 <div>

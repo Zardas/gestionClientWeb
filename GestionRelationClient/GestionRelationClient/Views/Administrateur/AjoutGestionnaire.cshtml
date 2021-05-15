@@ -18,7 +18,6 @@
     <div class="ajoutArticle">
         @using (Html.BeginForm("AjoutGestionnaire", "Administrateur", FormMethod.Post))
         {
-            @Html.Hidden("AdministrateurId", Model.UtilisateurId)
             <div class="form-group">
                 <div>
                     <label for="Login">Login</label>

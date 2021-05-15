@@ -26,7 +26,6 @@
             {
                     @using (Html.BeginForm("ResoudreTicket", "Gestionnaire", FormMethod.Post))
                     {
-                        @Html.Hidden("GestionnaireId", Model.UtilisateurId)
                         @Html.Hidden("SupportId", support.SupportId)
                         <div class="resolutionTicket">
                             <textarea name="Resolution" class="form-control" placeholder="Message de résolution" required></textarea>

@@ -18,16 +18,16 @@
 <body>
 
     <!-- HEADER -->
-    <nav>
+    <nav class="navClient">
         <div class="acceuil">
-            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
+            <a class="menuLink" asp-controller="Client" asp-action="Deconnexion" role="button">Accueil</a>
         </div>
         <div class="menu">
             @model GestionRelationClient.Models.Compte
-            <a class="menuLink" asp-controller="Client" asp-action="InterfaceClient" asp-route-CompteId="@Model.CompteId" asp-route-stringRecherchee="" role="button">Menu</a>
-            <a class="menuLink" asp-controller="Client" asp-action="ListeFactures" asp-route-CompteId="@Model.CompteId" role="button">Mes factures</a>
-            <a class="menuLink" asp-controller="Client" asp-action="ListeTicketsClient" asp-route-CompteId="@Model.CompteId" role="button">Mes tickets</a>
-            <a class="menuLink" asp-controller="Client" asp-action="SoldeClient" asp-route-CompteId="@Model.CompteId" role="button">Mon solde</a>
+            <a class="menuLink" asp-controller="Client" asp-action="InterfaceClient" asp-route-stringRecherchee="" role="button">Menu</a>
+            <a class="menuLink" asp-controller="Client" asp-action="ListeFactures" role="button">Mes factures</a>
+            <a class="menuLink" asp-controller="Client" asp-action="ListeTicketsClient" role="button">Mes tickets</a>
+            <a class="menuLink" asp-controller="Client" asp-action="SoldeClient" role="button">Mon solde</a>
         </div>
     </nav>
 

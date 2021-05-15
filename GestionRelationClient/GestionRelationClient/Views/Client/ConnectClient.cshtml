@@ -12,6 +12,15 @@
     <h1>Connexion</h1>
 
     <div class="formInscriptionClient">
+        @if (ViewData["sessionErreur"].ToString() == "True")
+        {
+            <p class="identifiantsInvalides">Session invalide</p>
+        }
+        @if (ViewData["sessionExpiree"].ToString() == "True")
+        {
+            <p class="identifiantsInvalides">Session Expirée</p>
+        }
+
         @using (Html.BeginForm("ConnectClient", "Client", FormMethod.Post))
         {
             <div class="form-group">

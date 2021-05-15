@@ -24,13 +24,12 @@
             <p>Total du panier : @ViewData["PrixTotal"] $</p>
             @using (Html.BeginForm("GenererFacture", "Client", FormMethod.Post))
             {
-                @Html.Hidden("CompteId", Model.CompteId)
                 <button type="submit" class="btn btn-primary">Générer une facture</button>
             }
             @if (ViewData["ErreurSolde"].ToString() == "True")
             {
                 <p class="soldeTropBas">
-                    <a asp-controller="Client" asp-action="SoldeClient" asp-route-CompteId="@Model.CompteId" role="button">Solde trop bas</a>
+                    <a asp-controller="Client" asp-action="SoldeClient" role="button">Solde trop bas</a>
                 </p>
             }
         </div>
@@ -39,7 +38,6 @@
     <div class="rechercheString">
         @using (Html.BeginForm("InterfaceClient", "Client", FormMethod.Post))
         {
-            @Html.Hidden("CompteId", Model.CompteId)
             <input type="text" name="StringRecherchee" class="form-control" placeholder="Recherche" />
             <button type="submit" class="btn"><img src="~/img/search.png" alt="Recherche" /></button>
         }
@@ -55,16 +53,15 @@
             {
                 <div class="formSelectionClient">
 
-                    <a asp-controller="Client" asp-action="DetailsArticle" asp-route-CompteId="@Model.CompteId" asp-route-ArticleId="@article.ArticleId" role="button">
+                    <a asp-controller="Client" asp-action="DetailsArticle" asp-route-ArticleId="@article.ArticleId" role="button">
                         <partial name="_ArticleSmall" model="article" />
                     </a>
                     <div class="buttons">
-                        <a asp-controller="Client" asp-action="OuvrirTicketSupport" asp-route-CompteId="@Model.CompteId" asp-route-ArticleId="@article.ArticleId" role="button">
+                        <a asp-controller="Client" asp-action="OuvrirTicketSupport" asp-route-ArticleId="@article.ArticleId" role="button">
                             <img src="~/img/error.png" alt="Ouvrir un ticket pour cet article" />
                         </a>
                         @using (Html.BeginForm("EnlevementPanierArticle", "Client", FormMethod.Post))
                         {
-                            @Html.Hidden("CompteId", Model.CompteId)
                             @Html.Hidden("ArticleId", article.ArticleId)
                             <button type="submit" class="btn"><img src="~/img/moins.png" alt="Retirer cet article au panier" /></button>
                         }
@@ -81,13 +78,12 @@
             @foreach (GestionRelationClient.Models.Produit produit in produitsDisponibles)
             {
                 <div class="formSelectionClient">
-                    <a asp-controller="Client" asp-action="DetailsArticle" asp-route-CompteId="@Model.CompteId" asp-route-ArticleId="@produit.ArticleId" role="button">
+                    <a asp-controller="Client" asp-action="DetailsArticle" asp-route-ArticleId="@produit.ArticleId" role="button">
                         <partial name="_ProduitSmall" model="produit" />
                     </a>
                     <div class="buttons">
                         @using (Html.BeginForm("AjoutPanierArticle", "Client", FormMethod.Post))
                         {
-                            @Html.Hidden("CompteId", Model.CompteId)
                             @Html.Hidden("ArticleId", produit.ArticleId)
                             <button type="submit" class="btn"><img src="~/img/ajoutPanier.png" alt="Ajouter ce produit au panier" /></button>
                         }
@@ -103,13 +99,12 @@
             @foreach (GestionRelationClient.Models.Service service in servicesDisponibles)
             {
                 <div class="formSelectionClient">
-                    <a asp-controller="Client" asp-action="DetailsArticle" asp-route-CompteId="@Model.CompteId" asp-route-ArticleId="@service.ArticleId" role="button">
+                    <a asp-controller="Client" asp-action="DetailsArticle" asp-route-ArticleId="@service.ArticleId" role="button">
                         <partial name="_ServiceSmall" model="service" />
                     </a>
                     <div class="buttons">
                         @using (Html.BeginForm("AjoutPanierArticle", "Client", FormMethod.Post))
                         {
-                            @Html.Hidden("CompteId", Model.CompteId)
                             @Html.Hidden("ArticleId", service.ArticleId)
                             <button type="submit" class="btn"><img src="~/img/ajoutPanier.png" alt="Ajouter ce service au panier" /></button>
                         }

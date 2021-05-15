@@ -13,6 +13,21 @@ nav {
     padding-bottom: 10px;
     margin-bottom: 2%;
 }
+.navClient {
+    background-color: #add398;
+}
+.navClient a, .navGestionnaire a {
+    color: rgb(36 31 32);
+}
+.navClient a:hover, .navGestionnaire a:hover {
+    color: black;
+}
+.navGestionnaire {
+    background-color: #f09537
+}
+.navAdministrateur {
+    background-color: #fe3636;
+}
 nav .acceuil {
     width: 10%;
     padding-left: 1%;

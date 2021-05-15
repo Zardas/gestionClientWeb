@@ -24,7 +24,6 @@
             {
                 <div class="formSelectionClient">
                     @Html.Hidden("IdClient", client.UtilisateurId)
-                    @Html.Hidden("IdGestionnaire", Model.UtilisateurId)
                     <partial name="_Client" model=client />
                     <div class="buttons">
                         <button type="submit" class="btn"><img src="~/img/plus2.png" alt="Associer ce compte" /></button>

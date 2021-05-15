@@ -19,6 +19,27 @@ namespace GestionRelationClient.Controllers
             _context = context;
         }
 
+        // Retourne l'id du gestionaire associé à la session, si celle-ci est encore valide ; sinon, retourne 0;
+        public int GetIdGestionnaire()
+        {
+
+            if (HttpContext.Session.GetInt32("GestionnaireId") == null || HttpContext.Session.GetString("DateFinSession") == null)
+            {
+                return 0;
+            }
+            else
+            {
+                DateTime dateFin = Convert.ToDateTime(HttpContext.Session.GetString("DateFinSession"));
+                DateTime dateActuelle = DateTime.Now;
+                if (dateActuelle > dateFin)
+                {
+                    return 0;
+                }
+
+                return (int)HttpContext.Session.GetInt32("GestionnaireId");
+            }
+        }
+
         public Gestionnaire getGestionnaire(int gestionnaireId)
         {
             return _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(gestionnaireId)).FirstOrDefault();
@@ -31,25 +52,33 @@ namespace GestionRelationClient.Controllers
 
         /* -------- ConnectGestionnaire -------- */
         [HttpGet]
-        public IActionResult InterfaceGestionnaire(int IdGestionnaire)
+        public IActionResult InterfaceGestionnaire()
         {
-            // On récupère le gestionnaire à partir de l'id envoyée (comme ça on évite de passer le mot de passe et tout via l'url)
-            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
 
-            // On récupère la liste des clients associés pour pouvoir l'afficher
-            List<Client> clientsAssocies = _context.Clients.Where(c => c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId)).ToList();
-            gestionnaire.ClientsAssocies = clientsAssocies;
+                // On récupère la liste des clients associés pour pouvoir l'afficher
+                List<Client> clientsAssocies = _context.Clients.Where(c => c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId)).ToList();
+                gestionnaire.ClientsAssocies = clientsAssocies;
 
-            // On récupère la liste des produits associés pour pouvoir l'afficher
-            List<Produit> produits = _context.Produits.Where(p => p.StockId.Equals(gestionnaire.StockId)).ToList();
-            ViewData["ProduitsAssocies"] = produits;
+                // On récupère la liste des produits associés pour pouvoir l'afficher
+                List<Produit> produits = _context.Produits.Where(p => p.StockId.Equals(gestionnaire.StockId)).ToList();
+                ViewData["ProduitsAssocies"] = produits;
 
-            // On récupère la liste des services pour pouvoir l'afficher
-            List<Service> services = _context.Services.ToList();
-            ViewData["Services"] = services;
+                // On récupère la liste des services pour pouvoir l'afficher
+                List<Service> services = _context.Services.ToList();
+                ViewData["Services"] = services;
 
-            return View(gestionnaire);
+                return View(gestionnaire);
+            }
         }
 
 
@@ -58,48 +87,73 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult SuppressionClientAssocie(IFormCollection clientASupprimer)
         {
-            Debug.WriteLine("Demande de suppression du client " + clientASupprimer["IdClient"]);
-            // On récupère le client à supprimer
-            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(Int32.Parse(clientASupprimer["IdClient"]))).FirstOrDefault();
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                // On récupère le client à supprimer
+                Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(Int32.Parse(clientASupprimer["IdClient"]))).FirstOrDefault();
 
-            Debug.WriteLine("Id du client trouvé : " + client.UtilisateurId);
-
-            // On récupère aussi le gestionnaire pour pouvoir le repasser via le get
-            Gestionnaire gestionnaire = getGestionnaire(client.GestionnaireAssocieId);
-
-            client.GestionnaireAssocieId = 0;
-            _context.SaveChanges();
+                Debug.WriteLine("Id du client trouvé : " + client.UtilisateurId);
 
 
-            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                client.GestionnaireAssocieId = 0;
+                _context.SaveChanges();
+
+
+                return RedirectToAction("InterfaceGestionnaire", "Gestionnaire");
+            }
         }
 
 
         /* -------- Liste des clients à associer -------- */
         [HttpGet]
-        public IActionResult AjoutClientAssocie(int IdGestionnaire)
+        public IActionResult AjoutClientAssocie()
         {
-            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
-            List<Client> clientsDisponibles = _context.Clients.Where(c => !(c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId))).ToList();
+                List<Client> clientsDisponibles = _context.Clients.Where(c => !(c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId))).ToList();
 
-            ViewData["clientsDisponibles"] = clientsDisponibles;
-            return View(gestionnaire);
+                ViewData["clientsDisponibles"] = clientsDisponibles;
+                return View(gestionnaire);
+            }
         }
 
         /* -------- Ajout client à associer -------- */
         [HttpPost]
         public IActionResult AjoutClientAssocie(IFormCollection clientAajouter)
         {
-            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(Int32.Parse(clientAajouter["IdClient"]))).FirstOrDefault();
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
-            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(clientAajouter["IdGestionnaire"]));
+                Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(Int32.Parse(clientAajouter["IdClient"]))).FirstOrDefault();
 
-            client.GestionnaireAssocieId = gestionnaire.UtilisateurId;
-            _context.SaveChanges();
 
-            Debug.WriteLine("Client " + client.Nom + " à associer à " + gestionnaire.NomGestionnaire);
-            return RedirectToAction("AjoutClientAssocie", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                client.GestionnaireAssocieId = gestionnaire.UtilisateurId;
+                _context.SaveChanges();
+
+                Debug.WriteLine("Client " + client.Nom + " à associer à " + gestionnaire.NomGestionnaire);
+                return RedirectToAction("AjoutClientAssocie", "Gestionnaire");
+            }
         }
 
 
@@ -115,97 +169,136 @@ namespace GestionRelationClient.Controllers
 
         /* -------- Formulaire pour ajouter un produit -------- */
         [HttpGet]
-        public IActionResult AjouterProduit(int IdGestionnaire)
+        public IActionResult AjouterProduit()
         {
-            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
-            
-            return View(gestionnaire);
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
+
+                return View(gestionnaire);
+            }
         }
 
         /* -------- Ajouter un produit -------- */
         [HttpPost]
         public IActionResult AjouterProduit(IFormCollection produit)
         {
-            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(produit["GestionnaireId"]));
-
-            // Un produit n'est pas lié à un abonnement
-            Abonnement abonnementNul = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
-
-            Produit produitAajouter = new Produit()
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
             {
-                Nom = produit["Nom"],
-                Image = produit["Image"],
-                Fabricant = produit["Fabricant"],
-                Type = produit["Type"],
-                Prix = Int32.Parse(produit["Prix"]),
-                Quantite = Int32.Parse(produit["Quantite"]),
-                Capacite = Int32.Parse(produit["Capacite"]),
-                Description = produit["Description"],
-                Manuel = produit["Manuel"],
-                StockId = gestionnaire.StockId,
-                Abonnement = abonnementNul,
-                PanierId = 1 // Le panier nul
-            };
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
-            _context.Produits.Add(produitAajouter);
-            _context.SaveChanges();
+                // Un produit n'est pas lié à un abonnement
+                Abonnement abonnementNul = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
 
-            return RedirectToAction("AjouterProduit", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                Produit produitAajouter = new Produit()
+                {
+                    Nom = produit["Nom"],
+                    Image = produit["Image"],
+                    Fabricant = produit["Fabricant"],
+                    Type = produit["Type"],
+                    Prix = Int32.Parse(produit["Prix"]),
+                    Quantite = Int32.Parse(produit["Quantite"]),
+                    Capacite = Int32.Parse(produit["Capacite"]),
+                    Description = produit["Description"],
+                    Manuel = produit["Manuel"],
+                    StockId = gestionnaire.StockId,
+                    Abonnement = abonnementNul,
+                    PanierId = 1 // Le panier nul
+                };
+
+                _context.Produits.Add(produitAajouter);
+                _context.SaveChanges();
+
+                return RedirectToAction("AjouterProduit", "Gestionnaire");
+            }
         }
 
         /* -------- Réduire de 1 la quantité un produit -------- */
         [HttpPost]
         public IActionResult SuppressionProduit(IFormCollection produitEnvoye)
         {
-            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(produitEnvoye["GestionnaireId"]));
-
-            Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(Int32.Parse(produitEnvoye["ProduitId"]))).FirstOrDefault();
-
-            Debug.WriteLine("Suppresion d'un " + produit.Nom + " de la part de " + gestionnaire.NomGestionnaire);
-
-            produit.Quantite--;
-            if(produit.Quantite <= 0)
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
             {
-                _context.Produits.Remove(produit);
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
             }
-            _context.SaveChanges();
+            else
+            {
+                Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(Int32.Parse(produitEnvoye["ProduitId"]))).FirstOrDefault();
 
-            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                produit.Quantite--;
+                if (produit.Quantite <= 0)
+                {
+                    _context.Produits.Remove(produit);
+                }
+                _context.SaveChanges();
+
+                return RedirectToAction("InterfaceGestionnaire", "Gestionnaire");
+            }
         }
 
 
 
         /* -------- Modification du produit -------- */
         [HttpGet]
-        public IActionResult ModificationProduit(int IdGestionnaire, int ProduitId)
+        public IActionResult ModificationProduit(int ProduitId)
         {
-            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
-            Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(ProduitId)).FirstOrDefault();
-            ViewData["Produit"] = produit;
+                Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(ProduitId)).FirstOrDefault();
+                ViewData["Produit"] = produit;
 
-            return View(gestionnaire);
+                return View(gestionnaire);
+            }
         }
         [HttpPost]
         public IActionResult ModifierProduit(IFormCollection produitAmodifier)
         {
-            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(produitAmodifier["GestionnaireId"]));
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(Int32.Parse(produitAmodifier["ProduitId"]))).FirstOrDefault();
 
-            Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(Int32.Parse(produitAmodifier["ProduitId"]))).FirstOrDefault();
+                produit.Nom = produitAmodifier["Nom"];
+                produit.Image = produitAmodifier["Image"];
+                produit.Fabricant = produitAmodifier["Fabricant"];
+                produit.Type = produitAmodifier["Type"];
+                produit.Prix = Int32.Parse(produitAmodifier["Prix"]);
+                produit.Quantite = Int32.Parse(produitAmodifier["Quantite"]);
+                produit.Capacite = Int32.Parse(produitAmodifier["Capacite"]);
+                produit.Description = produitAmodifier["Description"];
+                produit.Manuel = produitAmodifier["Manuel"];
 
-            produit.Nom = produitAmodifier["Nom"];
-            produit.Image = produitAmodifier["Image"];
-            produit.Fabricant = produitAmodifier["Fabricant"];
-            produit.Type = produitAmodifier["Type"];
-            produit.Prix = Int32.Parse(produitAmodifier["Prix"]);
-            produit.Quantite = Int32.Parse(produitAmodifier["Quantite"]);
-            produit.Capacite = Int32.Parse(produitAmodifier["Capacite"]);
-            produit.Description = produitAmodifier["Description"];
-            produit.Manuel = produitAmodifier["Manuel"];
+                _context.SaveChanges();
 
-            _context.SaveChanges();
-
-            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                return RedirectToAction("InterfaceGestionnaire", "Gestionnaire");
+            }
         }
 
 
@@ -225,113 +318,154 @@ namespace GestionRelationClient.Controllers
 
         /* -------- Formulaire pour ajouter un service -------- */
         [HttpGet]
-        public IActionResult AjouterService(int IdGestionnaire)
+        public IActionResult AjouterService()
         {
-            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
-            List<Abonnement> abonnements = _context.Abonnements.ToList();
-            ViewData["Abonnements"] = abonnements;
+                List<Abonnement> abonnements = _context.Abonnements.ToList();
+                ViewData["Abonnements"] = abonnements;
 
-            return View(gestionnaire);
+                return View(gestionnaire);
+            }
         }
 
         /* -------- Ajouter un service -------- */
         [HttpPost]
         public IActionResult AjouterService(IFormCollection service)
         {
-            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(service["GestionnaireId"]));
-
-
-            Abonnement abonnement;
-            // Un abonnement peut ou non être lié à un abonnement
-            if(service["AbonnementAssocie"] == "on")
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
             {
-                Debug.WriteLine("Abonnement choisi id : " + service["Abonnement"]);
-                abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(Int32.Parse(service["Abonnement"]))).FirstOrDefault();
-                Debug.WriteLine("Abonnement choisi durée " + abonnement.DureeAbonnement);
-            } else
-            {
-                Debug.WriteLine("Aucun abonnement choisi");
-                abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
             }
-
-            Service serviceAajouter = new Service()
+            else
             {
-                Nom = service["Nom"],
-                Image = service["Image"],
-                Type = service["Type"],
-                Prix = Int32.Parse(service["Prix"]),
-                Description = service["Description"],
-                Manuel = service["Manuel"],
-                Conditions = service["Conditions"],
-                Abonnement = abonnement,
-                PanierId = 1 // Le panier nul
-            };
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
-            _context.Services.Add(serviceAajouter);
-            _context.SaveChanges();
 
-            return RedirectToAction("AjouterService", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                Abonnement abonnement;
+                // Un abonnement peut ou non être lié à un abonnement
+                if (service["AbonnementAssocie"] == "on")
+                {
+                    Debug.WriteLine("Abonnement choisi id : " + service["Abonnement"]);
+                    abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(Int32.Parse(service["Abonnement"]))).FirstOrDefault();
+                    Debug.WriteLine("Abonnement choisi durée " + abonnement.DureeAbonnement);
+                }
+                else
+                {
+                    Debug.WriteLine("Aucun abonnement choisi");
+                    abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
+                }
+
+                Service serviceAajouter = new Service()
+                {
+                    Nom = service["Nom"],
+                    Image = service["Image"],
+                    Type = service["Type"],
+                    Prix = Int32.Parse(service["Prix"]),
+                    Description = service["Description"],
+                    Manuel = service["Manuel"],
+                    Conditions = service["Conditions"],
+                    Abonnement = abonnement,
+                    PanierId = 1 // Le panier nul
+                };
+
+                _context.Services.Add(serviceAajouter);
+                _context.SaveChanges();
+
+                return RedirectToAction("AjouterService", "Gestionnaire");
+            }
         }
 
         /* -------- Supprimer un service -------- */
         [HttpPost]
         public IActionResult SuppressionService(IFormCollection serviceEnvoye)
         {
-            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(serviceEnvoye["GestionnaireId"]));
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Service service = _context.Services.Where(p => p.ArticleId.Equals(Int32.Parse(serviceEnvoye["ServiceId"]))).FirstOrDefault();
 
-            Service service = _context.Services.Where(p => p.ArticleId.Equals(Int32.Parse(serviceEnvoye["ServiceId"]))).FirstOrDefault();
+                _context.Services.Remove(service);
+                _context.SaveChanges();
 
-            Debug.WriteLine("Suppresion d'un " + service.Nom + " de la part de " + gestionnaire.NomGestionnaire);
-
-            _context.Services.Remove(service);
-            _context.SaveChanges();
-
-            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                return RedirectToAction("InterfaceGestionnaire", "Gestionnaire");
+            }
         }
 
 
         /* -------- Modification du service -------- */
         [HttpGet]
-        public IActionResult ModificationService(int IdGestionnaire, int ServiceId)
+        public IActionResult ModificationService(int ServiceId)
         {
-            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
-            Service service = _context.Services.Where(s => s.ArticleId.Equals(ServiceId)).FirstOrDefault();
-            ViewData["Service"] = service;
+                Service service = _context.Services.Where(s => s.ArticleId.Equals(ServiceId)).FirstOrDefault();
+                ViewData["Service"] = service;
 
-            List<Abonnement> abonnements = _context.Abonnements.ToList();
-            ViewData["Abonnements"] = abonnements;
+                List<Abonnement> abonnements = _context.Abonnements.ToList();
+                ViewData["Abonnements"] = abonnements;
 
-            return View(gestionnaire);
+                return View(gestionnaire);
+            }
         }
         [HttpPost]
         public IActionResult ModifierService(IFormCollection serviceAmodifier)
         {
-            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(serviceAmodifier["GestionnaireId"]));
-
-            Service service = _context.Services.Where(s => s.ArticleId.Equals(Int32.Parse(serviceAmodifier["ServiceId"]))).FirstOrDefault();
-
-            service.Nom = serviceAmodifier["Nom"];
-            service.Image = serviceAmodifier["Image"];
-            service.Type = serviceAmodifier["Type"];
-            service.Prix = Int32.Parse(serviceAmodifier["Prix"]);
-            service.Description = serviceAmodifier["Description"];
-            service.Manuel = serviceAmodifier["Manuel"];
-            service.Conditions = serviceAmodifier["Conditions"];
-
-            // Un abonnement peut ou non être lié à un abonnement
-            if (serviceAmodifier["AbonnementAssocie"] == "on")
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
             {
-                service.Abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(Int32.Parse(serviceAmodifier["Abonnement"]))).FirstOrDefault();
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
             }
             else
             {
-                service.Abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
-            }
-            _context.SaveChanges();
 
-            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                Service service = _context.Services.Where(s => s.ArticleId.Equals(Int32.Parse(serviceAmodifier["ServiceId"]))).FirstOrDefault();
+
+                service.Nom = serviceAmodifier["Nom"];
+                service.Image = serviceAmodifier["Image"];
+                service.Type = serviceAmodifier["Type"];
+                service.Prix = Int32.Parse(serviceAmodifier["Prix"]);
+                service.Description = serviceAmodifier["Description"];
+                service.Manuel = serviceAmodifier["Manuel"];
+                service.Conditions = serviceAmodifier["Conditions"];
+
+                // Un abonnement peut ou non être lié à un abonnement
+                if (serviceAmodifier["AbonnementAssocie"] == "on")
+                {
+                    service.Abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(Int32.Parse(serviceAmodifier["Abonnement"]))).FirstOrDefault();
+                }
+                else
+                {
+                    service.Abonnement = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
+                }
+                _context.SaveChanges();
+
+                return RedirectToAction("InterfaceGestionnaire", "Gestionnaire");
+            }
         }
 
 
@@ -351,24 +485,43 @@ namespace GestionRelationClient.Controllers
 
         /* -------- Formulaire pour ajouter un abonnement -------- */
         [HttpGet]
-        public IActionResult AjouterAbonnement(int IdGestionnaire)
+        public IActionResult AjouterAbonnement()
         {
-            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
-            return View(gestionnaire);
+                return View(gestionnaire);
+            }
         }
         /* -------- Ajout d'un abonnement -------- */
         [HttpPost]
         public IActionResult AjouterAbonnement(IFormCollection abonnementEnvoye)
         {
-            Abonnement abonnement = new Abonnement()
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
             {
-                DureeAbonnement = Int32.Parse(abonnementEnvoye["Duree"])
-            };
-            _context.Abonnements.Add(abonnement);
-            _context.SaveChanges();
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
 
-            return RedirectToAction("InterfaceGestionnaire", "Gestionnaire", new { IdGestionnaire = Int32.Parse(abonnementEnvoye["GestionnaireId"])});
+                Abonnement abonnement = new Abonnement()
+                {
+                    DureeAbonnement = Int32.Parse(abonnementEnvoye["Duree"])
+                };
+                _context.Abonnements.Add(abonnement);
+                _context.SaveChanges();
+
+                return RedirectToAction("InterfaceGestionnaire", "Gestionnaire");
+            }
         }
 
 
@@ -378,61 +531,77 @@ namespace GestionRelationClient.Controllers
 
 
         [HttpGet]
-        public IActionResult ListeTicketsGestionnaire(int IdGestionnaire)
+        public IActionResult ListeTicketsGestionnaire()
         {
-            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
-
-
-            List<Client> clients = _context.Clients.Where(c => c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId)).ToList();
-
-            // Liste de tout les comptes associés
-            List<Compte> comptes = new List<Compte>();
-            clients.ForEach(client =>
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
             {
-                List<Compte> comptesDuClient = _context.Comptes.Where(c => c.ClientId.Equals(client.UtilisateurId)).ToList();
-                comptesDuClient.ForEach(compte =>
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
+                Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
+
+
+                List<Client> clients = _context.Clients.Where(c => c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId)).ToList();
+
+                // Liste de tout les comptes associés
+                List<Compte> comptes = new List<Compte>();
+                clients.ForEach(client =>
                 {
-                    comptes.Add(compte);
+                    List<Compte> comptesDuClient = _context.Comptes.Where(c => c.ClientId.Equals(client.UtilisateurId)).ToList();
+                    comptesDuClient.ForEach(compte =>
+                    {
+                        comptes.Add(compte);
+                    });
+
                 });
 
-            });
 
+                List<Support> supportsAssocies = new List<Support>();
 
-            List<Support> supportsAssocies = new List<Support>();
-
-            comptes.ForEach(compte =>
-            {
-                List<Support> supports = _context.Supports.Where(s => s.CompteId.Equals(compte.CompteId)).ToList();
-
-                supports.ForEach(support =>
+                comptes.ForEach(compte =>
                 {
-                    supportsAssocies.Add(support);
-                });
-                
-            });
-            
-            ViewData["Supports"] = supportsAssocies;
+                    List<Support> supports = _context.Supports.Where(s => s.CompteId.Equals(compte.CompteId)).ToList();
 
-            return View(gestionnaire);
+                    supports.ForEach(support =>
+                    {
+                        supportsAssocies.Add(support);
+                    });
+
+                });
+
+                ViewData["Supports"] = supportsAssocies;
+
+                return View(gestionnaire);
+            }
         }
 
         [HttpPost]
         public IActionResult ResoudreTicket(IFormCollection resolutionEnvoyee)
         {
-            
-            int GestionnaireId = Int32.Parse(resolutionEnvoyee["GestionnaireId"]);
-            int SupportId = Int32.Parse(resolutionEnvoyee["SupportId"]);
+            // On vérifie que la session n'est pas expirée
+            int IdGestionnaire = GetIdGestionnaire();
+            if (IdGestionnaire == 0)
+            {
+                return RedirectToAction("ConnectClient", "Client", new { sessionExpiree = true });
+            }
+            else
+            {
 
-            Debug.WriteLine("Résolution du ticket n°" + SupportId);
+                int GestionnaireId = Int32.Parse(resolutionEnvoyee["GestionnaireId"]);
+                int SupportId = Int32.Parse(resolutionEnvoyee["SupportId"]);
 
-            Gestionnaire gestionnaire = getGestionnaire(GestionnaireId);
+                Debug.WriteLine("Résolution du ticket n°" + SupportId);
 
-            Support support = _context.Supports.Where(s => s.SupportId.Equals(SupportId)).FirstOrDefault();
+                Support support = _context.Supports.Where(s => s.SupportId.Equals(SupportId)).FirstOrDefault();
 
-            support.Resoudre(resolutionEnvoyee["Resolution"]);
-            _context.SaveChanges();
+                support.Resoudre(resolutionEnvoyee["Resolution"]);
+                _context.SaveChanges();
 
-            return RedirectToAction("ListeTicketsGestionnaire", "Gestionnaire", new { IdGestionnaire = gestionnaire.UtilisateurId });
+                return RedirectToAction("ListeTicketsGestionnaire", "Gestionnaire");
+            }
         }
     }
 }

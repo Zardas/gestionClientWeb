@@ -22,7 +22,6 @@
 
         @using (Html.BeginForm("SoldeClient", "Client", FormMethod.Post))
         {
-            @Html.Hidden("CompteId", Model.CompteId)
             <label for="Montant">Ajouter du solde</label>
             <input type="number" name="Montant" class="form-control" />
             <button type="submit" class="btn btn-primary">Ajouter</button>

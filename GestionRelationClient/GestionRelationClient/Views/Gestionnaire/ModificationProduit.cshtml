@@ -20,7 +20,6 @@
     <div class="ajoutArticle">
         @using (Html.BeginForm("ModifierProduit", "Gestionnaire", FormMethod.Post))
         {
-            @Html.Hidden("GestionnaireId", Model.UtilisateurId)
             @Html.Hidden("ProduitId", produit.ArticleId)
             <div class="form-group">
                 <div>
@@ -28,7 +27,7 @@
                     <input type="text" name="Nom" class="form-control" value="@produit.Nom" required />
                 </div>
                 <div>
-                    <label for="Image">Image (à placer dans "wwwwroot/img/articles/")</label>
+                    <label for="Image">Image</label>
                     <input type="text" name="Image" class="form-control" value="@produit.Image" required />
                 </div>
                 <div>

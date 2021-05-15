@@ -18,16 +18,16 @@
 <body>
 
     <!-- HEADER -->
-    <nav>
+    <nav class="navGestionnaire">
         <div class="menu">
-            <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
+            <a class="menuLink" asp-controller="Client" asp-action="Deconnexion" role="button">Accueil</a>
             @model GestionRelationClient.Models.Gestionnaire
-            <a class="menuLink" asp-controller="Gestionnaire" asp-action="InterfaceGestionnaire" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Menu</a>
-            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjoutClientAssocie" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Associer un client</a>
-            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterProduit" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un produit</a>
-            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterService" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un service</a>
-            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterAbonnement" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Ajouter un abonnement</a>
-            <a class="menuLink" asp-controller="Gestionnaire" asp-action="ListeTicketsGestionnaire" asp-route-IdGestionnaire="@Model.UtilisateurId" role="button">Liste des tickets</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="InterfaceGestionnaire" role="button">Menu</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjoutClientAssocie" role="button">Associer un client</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterProduit" role="button">Ajouter un produit</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterService" role="button">Ajouter un service</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="AjouterAbonnement" role="button">Ajouter un abonnement</a>
+            <a class="menuLink" asp-controller="Gestionnaire" asp-action="ListeTicketsGestionnaire" role="button">Liste des tickets</a>
         </div>
     </nav>
 

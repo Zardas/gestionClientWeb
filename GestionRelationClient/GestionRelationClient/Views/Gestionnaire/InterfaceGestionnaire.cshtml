@@ -53,7 +53,6 @@
                     </a>
                     @using (Html.BeginForm("SuppressionProduit", "Gestionnaire", FormMethod.Post))
                     {
-                        @Html.Hidden("GestionnaireId", Model.UtilisateurId)
                         @Html.Hidden("ProduitId", produit.ArticleId)
                         <button type="submit" class="btn"><img src="~/img/moins2.png" alt="Supprimer ce produit" /></button>
                     }
@@ -76,7 +75,6 @@
                         </a>
                         @using (Html.BeginForm("SuppressionService", "Gestionnaire", FormMethod.Post))
                         {
-                            @Html.Hidden("GestionnaireId", Model.UtilisateurId)
                             @Html.Hidden("ProduitId", service.ArticleId)
                             <button type="submit" class="btn"><img src="~/img/moins2.png" alt="Supprimer ce service" /></button>
                         }
