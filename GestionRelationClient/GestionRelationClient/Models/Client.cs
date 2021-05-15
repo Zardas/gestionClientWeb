@@ -36,6 +36,7 @@ namespace GestionRelationClient.Models
         public Client()
         {
             this.Comptes = new List<Compte>();
+            this.Solde = 0;
         }
 
 

@@ -19,11 +19,12 @@
 
     <!-- HEADER -->
     <nav>
-        <a class="menuLink" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
+        <a class="menuLink acceuil" asp-controller="Client" asp-action="ConnectClient" role="button">Accueil</a>
         <div class="menu">
             @model GestionRelationClient.Models.Administrateur
             <a class="menuLink" asp-controller="Administrateur" asp-action="InterfaceAdministrateur" asp-route-IdAdministrateur="@Model.UtilisateurId" role="button">Menu</a>
-
+            <a class="menuLink" asp-controller="Administrateur" asp-action="AjoutClient" asp-route-IdAdministrateur="@Model.UtilisateurId" role="button">Ajouter un client</a>
+            <a class="menuLink" asp-controller="Administrateur" asp-action="AjoutGestionnaire" asp-route-IdAdministrateur="@Model.UtilisateurId" role="button">Ajouter un commercial</a>
         </div>
     </nav>
 

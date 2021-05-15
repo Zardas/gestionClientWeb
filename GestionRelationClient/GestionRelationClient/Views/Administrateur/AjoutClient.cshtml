@@ -1,0 +1,63 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_LayoutAdministrateur";
+    ViewBag.Title = "Ajout client";
+}
+@model GestionRelationClient.Models.Administrateur
+
+<div class="interfaceGestionnaire">
+    <h2>Ajout d'un client</h2>
+
+    <div class="ajoutArticle">
+        @using (Html.BeginForm("AjoutClient", "Administrateur", FormMethod.Post))
+        {
+            @Html.Hidden("AdministrateurId", Model.UtilisateurId)
+            <div class="form-group">
+                <div>
+                    <label for="Login">Login</label>
+                    <input type="text" name="Login" class="form-control" required />
+                </div>
+                <div>
+                    <label for="Mail">Mail</label>
+                    <input type="text" name="Mail" class="form-control" required />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div>
+                    <label for="Nom">Nom</label>
+                    <input type="text" name="Nom" class="form-control" required />
+                </div>
+                <div>
+                    <label for="Prenom">Prenom</label>
+                    <input type="text" name="Prenom" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="MotDePasse">Mot de passe</label>
+                    <input type="text" name="MotDePasse" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="Telephone">Téléphone</label>
+                    <input type="text" name="Telephone" class="form-control" required />
+                </div>
+                <div>
+                    <label for="Age">Age</label>
+                    <input type="number" name="Age" class="form-control" required />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Ajouter ce client</button>
+        }
+    </div>
+
+</div>

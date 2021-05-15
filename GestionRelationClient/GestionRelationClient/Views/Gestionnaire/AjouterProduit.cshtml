@@ -12,7 +12,7 @@
     <h2>Ajout d'un produit</h2>
 
     <div class="ajoutArticle">
-        @using (Html.BeginForm("AjouterProduit", "Gestionnaire", FormMethod.Post))
+        @using (Html.BeginForm("AjoutProduit", "Gestionnaire", FormMethod.Post))
         {
             @Html.Hidden("GestionnaireId", Model.UtilisateurId)
             <div class="form-group">
@@ -21,7 +21,7 @@
                     <input type="text" name="Nom" class="form-control" required/>
                 </div>
                 <div>
-                    <label for="Image">Image (à placer dans "wwwwroot/img/articles/")</label>
+                    <label for="Image">Image</label>
                     <input type="text" name="Image" class="form-control" required/>
                 </div>
                 <div>

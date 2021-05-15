@@ -1,0 +1,64 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_LayoutAdministrateur";
+    ViewBag.Title = "Modification commercial";
+}
+@using GestionRelationClient.Models
+@{
+    List<Role> roles = ViewData["Roles"] as List<Role>;
+    Gestionnaire gestionnaire = ViewData["Gestionnaire"] as Gestionnaire;
+}
+@model GestionRelationClient.Models.Administrateur
+
+<div class="interfaceGestionnaire">
+    <h2>Modification de @gestionnaire.Login</h2>
+
+    <div class="ajoutArticle">
+        @using (Html.BeginForm("ModificationGestionnaire", "Administrateur", FormMethod.Post))
+        {
+            @Html.Hidden("AdministrateurId", Model.UtilisateurId)
+            @Html.Hidden("GestionnaireId", gestionnaire.UtilisateurId)
+            <div class="form-group">
+                <div>
+                    <label for="Login">Login</label>
+                    <input type="text" name="Login" class="form-control" value="@gestionnaire.Login" required />
+                </div>
+                <div>
+                    <label for="Email">Mail</label>
+                    <input type="text" name="Email" class="form-control" value="@gestionnaire.Email" required />
+                </div>
+                <div>
+                    <label for="Nom">Nom</label>
+                    <input type="text" name="Nom" class="form-control" value="@gestionnaire.NomGestionnaire" required />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div>
+                    <label for="Role">Roles :</label>
+                    <select name="Role" class="form-control" required>
+                        @foreach (GestionRelationClient.Models.Role role in roles)
+                        {
+                            if (gestionnaire.RoleId == role.RoleId)
+                            {
+                                <option value="@role.RoleId" selected>@role.Title</option>
+                            }
+                            else
+                            {
+                                <option value="@role.RoleId">@role.Title</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Ajouter ce gestionnaire</button>
+        }
+    </div>
+
+</div>

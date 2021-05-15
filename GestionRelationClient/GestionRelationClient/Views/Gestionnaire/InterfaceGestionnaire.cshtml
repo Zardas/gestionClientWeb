@@ -16,13 +16,14 @@
 
 <div class="interfaceGestionnaire">
     <div class="bienvenueInterfaceClient">
-        <h2>Connecté sous @Model.NomGestionnaire</h2>
+        <h2>Connecté sous @Model.Login</h2>
         <div>Gain : @Model.Gain</div>
     </div>
 
     <div class="lists">
         <!-- Liste des clients associés -->
         <div class="clientsListe">
+            <h3>Clients associés</h3>
             @foreach (GestionRelationClient.Models.Client client in Model.ClientsAssocies)
             {
                 @using (Html.BeginForm("SuppressionClientAssocie", "Gestionnaire", FormMethod.Post))
@@ -41,6 +42,7 @@
 
         <!-- Liste des produits associés -->
         <div class="clientsListe">
+            <h3>Produits gérés</h3>
             @foreach (GestionRelationClient.Models.Produit produit in produits)
             {
             <div class="formSelectionClient">
@@ -63,6 +65,7 @@
 
         <!-- Liste des services -->
         <div class="clientsListe">
+            <h3>Services</h3>
             @foreach (GestionRelationClient.Models.Service service in services)
             {
                 <div class="formSelectionClient">

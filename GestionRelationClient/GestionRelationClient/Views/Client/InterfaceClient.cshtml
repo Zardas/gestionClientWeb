@@ -50,6 +50,7 @@
 
         <!-- Liste des articles dans le panier -->
         <div class="clientsListe">
+            <h3>Mon panier</h3>
             @foreach (GestionRelationClient.Models.Article article in panier)
             {
                 <div class="formSelectionClient">
@@ -76,6 +77,7 @@
 
         <!-- Liste des produits disponible -->
         <div class="clientsListe">
+            <h3>Produits disponibles</h3>
             @foreach (GestionRelationClient.Models.Produit produit in produitsDisponibles)
             {
                 <div class="formSelectionClient">
@@ -97,6 +99,7 @@
 
         <!-- Liste des services disponibles -->
         <div class="clientsListe">
+            <h3>Services disponibles</h3>
             @foreach (GestionRelationClient.Models.Service service in servicesDisponibles)
             {
                 <div class="formSelectionClient">

@@ -6,9 +6,61 @@
     Layout = "_LayoutAdministrateur";
     ViewBag.Title = "Interface administrateur";
 }
+@using GestionRelationClient.Models
+@{
+    List<Client> clients = ViewData["Clients"] as List<Client>;
+    List<Gestionnaire> gestionnaires = ViewData["Gestionnaires"] as List<Gestionnaire>;
+}
 
 @model GestionRelationClient.Models.Administrateur
 
-<div class="interfaceAdministrateur">
-    <h2>@Model.NomAdministrateur</h2>
+<div class="interfaceGestionnaire">
+    <h2>Bienvenue @Model.Login</h2>
+
+    <div class="lists">
+        <!-- Liste des clients -->
+        <div class="clientsListe">
+            <h3>Clients</h3>
+            @foreach (GestionRelationClient.Models.Client client in clients)
+            {
+                <div class="formSelectionClient">
+                    <partial name="_Client" model="client" />
+                    <div class="buttons">
+                        <a asp-controller="Administrateur" asp-action="ModificationClient" asp-route-IdAdministrateur="@Model.UtilisateurId" asp-route-ClientId="@client.UtilisateurId" role="button">
+                            <img src="~/img/modifier.png" alt="Modifier ce client" />
+                        </a>
+                        @using (Html.BeginForm("SuppressionClient", "Administrateur", FormMethod.Post))
+                        {
+                            @Html.Hidden("AdministrateurId", Model.UtilisateurId)
+                            @Html.Hidden("ClientId", client.UtilisateurId)
+                            <button type="submit" class="btn"><img src="~/img/moins2.png" alt="Supprimer ce client" /></button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Liste des Gestionnaires -->
+        <div class="clientsListe">
+            <h3>Commerciaux</h3>
+            @foreach (GestionRelationClient.Models.Gestionnaire gestionnaire in gestionnaires)
+            {
+                <div class="formSelectionClient">
+                    <partial name="_Gestionnaire" model="gestionnaire" />
+                    <div class="buttons">
+                        <a asp-controller="Administrateur" asp-action="ModificationGestionnaire" asp-route-IdAdministrateur="@Model.UtilisateurId" asp-route-GestionnaireId="@gestionnaire.UtilisateurId" role="button">
+                            <img src="~/img/modifier.png" alt="Modifier ce gestionnaire" />
+                        </a>
+                        @using (Html.BeginForm("SuppressionGestionnaire", "Administrateur", FormMethod.Post))
+                        {
+                            @Html.Hidden("AdministrateurId", Model.UtilisateurId)
+                            @Html.Hidden("GestionnaireId", gestionnaire.UtilisateurId)
+                            <button type="submit" class="btn"><img src="~/img/moins2.png" alt="Supprimer ce gestionnaire" /></button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
 </div>

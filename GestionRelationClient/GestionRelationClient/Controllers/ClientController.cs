@@ -23,18 +23,22 @@ namespace GestionRelationClient.Controllers
         }
 
 
+        public Client getClient(int clientId)
+        {
+            return _context.Clients.Where(c => c.UtilisateurId.Equals(clientId)).FirstOrDefault();
+        }
+
+        public Client getClient(string clientId)
+        {
+            return _context.Clients.Where(c => c.UtilisateurId.Equals(Int32.Parse(clientId))).FirstOrDefault();
+        }
+
+
 
         /* -------- ConnectClient -------- */
         [HttpGet]
         public IActionResult ConnectClient(bool erreurConnexion)
         {
-            /*Debug.WriteLine(erreurConnexion);
-
-            if(!erreurConnexion)
-            {
-                erreurConnexion = false;
-            }*/
-
             if(erreurConnexion)
             {
                 Debug.WriteLine("Erreur à la connexion");
@@ -57,7 +61,6 @@ namespace GestionRelationClient.Controllers
 
                 if (utilisateurATrouver != null)
                 {
-                    Debug.WriteLine("Utilisateur connu :)");
                     utilisateurATrouver.Connexion();
                     _context.SaveChanges();
 
@@ -137,14 +140,9 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult ListeComptesClient(int ClientId)
         {
-            Debug.WriteLine("Id client fourni : " + ClientId);
-
-            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(ClientId)).FirstOrDefault();
-
-            Debug.WriteLine("Login du client " + client.Login);
+            Client client = getClient(ClientId);
 
             List<Compte> comptes = _context.Comptes.Where(c => (c.ClientId.Equals(client.UtilisateurId))).ToList();
-
 
             ViewData["Client"] = client;
             return View(comptes);
@@ -153,11 +151,8 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult SelectionCompteClient(IFormCollection compte)
         {
-            Debug.WriteLine("Sélection du compte numéro " + compte["IdCompte"]);
-
             Compte compteToFind = _context.Comptes.Where(c => (c.CompteId.Equals(Int32.Parse(compte["IdCompte"])))).FirstOrDefault();
 
-            Debug.WriteLine("Envoi du compte : " + compteToFind.NomCompte);
             return RedirectToAction("InterfaceClient", new { CompteId = compteToFind.CompteId, stringRecherchee = "" });
         }
 
@@ -169,8 +164,7 @@ namespace GestionRelationClient.Controllers
             {
                 int idClient = Int32.Parse(nouveauCompte["Id"]);
 
-
-                Client client = _context.Clients.Where(c => (c.UtilisateurId.Equals(idClient))).FirstOrDefault();
+                Client client = getClient(idClient);
 
                 Compte compteATrouver = _context.Comptes.Where(c => (
                     c.ClientId.Equals(client.UtilisateurId) &&
@@ -207,7 +201,7 @@ namespace GestionRelationClient.Controllers
         {
             int clientId = Int32.Parse(clientPasse["ClientId"]);
 
-            Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(clientId)).FirstOrDefault();
+            Client client = getClient(clientId);
 
             // Tout ça aurait pû être directement géré dans Client.cs, mais je toruve plus propre de ne pas incorporé de bibliothèque http dans le modèle
             string Login;

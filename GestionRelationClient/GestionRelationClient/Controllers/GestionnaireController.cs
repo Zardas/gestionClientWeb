@@ -19,13 +19,22 @@ namespace GestionRelationClient.Controllers
             _context = context;
         }
 
+        public Gestionnaire getGestionnaire(int gestionnaireId)
+        {
+            return _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(gestionnaireId)).FirstOrDefault();
+        }
+
+        public Gestionnaire getGestionnaire(string gestionnaireId)
+        {
+            return _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(gestionnaireId))).FirstOrDefault();
+        }
 
         /* -------- ConnectGestionnaire -------- */
         [HttpGet]
         public IActionResult InterfaceGestionnaire(int IdGestionnaire)
         {
             // On récupère le gestionnaire à partir de l'id envoyée (comme ça on évite de passer le mot de passe et tout via l'url)
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
 
             // On récupère la liste des clients associés pour pouvoir l'afficher
@@ -56,7 +65,7 @@ namespace GestionRelationClient.Controllers
             Debug.WriteLine("Id du client trouvé : " + client.UtilisateurId);
 
             // On récupère aussi le gestionnaire pour pouvoir le repasser via le get
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(client.GestionnaireAssocieId)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(client.GestionnaireAssocieId);
 
             client.GestionnaireAssocieId = 0;
             _context.SaveChanges();
@@ -70,7 +79,7 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult AjoutClientAssocie(int IdGestionnaire)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
             List<Client> clientsDisponibles = _context.Clients.Where(c => !(c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId))).ToList();
 
@@ -83,7 +92,8 @@ namespace GestionRelationClient.Controllers
         public IActionResult AjoutClientAssocie(IFormCollection clientAajouter)
         {
             Client client = _context.Clients.Where(c => c.UtilisateurId.Equals(Int32.Parse(clientAajouter["IdClient"]))).FirstOrDefault();
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(clientAajouter["IdGestionnaire"]))).FirstOrDefault();
+
+            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(clientAajouter["IdGestionnaire"]));
 
             client.GestionnaireAssocieId = gestionnaire.UtilisateurId;
             _context.SaveChanges();
@@ -107,7 +117,7 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult AjouterProduit(int IdGestionnaire)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
             
             return View(gestionnaire);
         }
@@ -116,8 +126,7 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult AjouterProduit(IFormCollection produit)
         {
-            Debug.WriteLine("FLAG A : type : " + produit["Type"]);
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(produit["GestionnaireId"]))).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(produit["GestionnaireId"]));
 
             // Un produit n'est pas lié à un abonnement
             Abonnement abonnementNul = _context.Abonnements.Where(a => a.AbonnementId.Equals(1)).FirstOrDefault();
@@ -148,7 +157,8 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult SuppressionProduit(IFormCollection produitEnvoye)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(produitEnvoye["GestionnaireId"]))).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(produitEnvoye["GestionnaireId"]));
+
             Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(Int32.Parse(produitEnvoye["ProduitId"]))).FirstOrDefault();
 
             Debug.WriteLine("Suppresion d'un " + produit.Nom + " de la part de " + gestionnaire.NomGestionnaire);
@@ -169,9 +179,7 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult ModificationProduit(int IdGestionnaire, int ProduitId)
         {
-            Debug.WriteLine("Id gestionnaire : " + IdGestionnaire);
-            Debug.WriteLine("Id client : " + ProduitId);
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
             Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(ProduitId)).FirstOrDefault();
             ViewData["Produit"] = produit;
@@ -181,7 +189,7 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult ModifierProduit(IFormCollection produitAmodifier)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(produitAmodifier["GestionnaireId"]))).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(produitAmodifier["GestionnaireId"]));
 
             Produit produit = _context.Produits.Where(p => p.ArticleId.Equals(Int32.Parse(produitAmodifier["ProduitId"]))).FirstOrDefault();
 
@@ -219,7 +227,7 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult AjouterService(int IdGestionnaire)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
             List<Abonnement> abonnements = _context.Abonnements.ToList();
             ViewData["Abonnements"] = abonnements;
@@ -231,7 +239,7 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult AjouterService(IFormCollection service)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(service["GestionnaireId"]))).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(service["GestionnaireId"]));
 
 
             Abonnement abonnement;
@@ -270,7 +278,8 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult SuppressionService(IFormCollection serviceEnvoye)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(serviceEnvoye["GestionnaireId"]))).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(serviceEnvoye["GestionnaireId"]));
+
             Service service = _context.Services.Where(p => p.ArticleId.Equals(Int32.Parse(serviceEnvoye["ServiceId"]))).FirstOrDefault();
 
             Debug.WriteLine("Suppresion d'un " + service.Nom + " de la part de " + gestionnaire.NomGestionnaire);
@@ -286,9 +295,7 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult ModificationService(int IdGestionnaire, int ServiceId)
         {
-            Debug.WriteLine("Id gestionnaire : " + IdGestionnaire);
-            Debug.WriteLine("Id client : " + ServiceId);
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
             Service service = _context.Services.Where(s => s.ArticleId.Equals(ServiceId)).FirstOrDefault();
             ViewData["Service"] = service;
@@ -301,7 +308,7 @@ namespace GestionRelationClient.Controllers
         [HttpPost]
         public IActionResult ModifierService(IFormCollection serviceAmodifier)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(Int32.Parse(serviceAmodifier["GestionnaireId"]))).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(Int32.Parse(serviceAmodifier["GestionnaireId"]));
 
             Service service = _context.Services.Where(s => s.ArticleId.Equals(Int32.Parse(serviceAmodifier["ServiceId"]))).FirstOrDefault();
 
@@ -346,7 +353,7 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult AjouterAbonnement(int IdGestionnaire)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
             return View(gestionnaire);
         }
@@ -373,7 +380,7 @@ namespace GestionRelationClient.Controllers
         [HttpGet]
         public IActionResult ListeTicketsGestionnaire(int IdGestionnaire)
         {
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(IdGestionnaire)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(IdGestionnaire);
 
 
             List<Client> clients = _context.Clients.Where(c => c.GestionnaireAssocieId.Equals(gestionnaire.UtilisateurId)).ToList();
@@ -418,7 +425,7 @@ namespace GestionRelationClient.Controllers
 
             Debug.WriteLine("Résolution du ticket n°" + SupportId);
 
-            Gestionnaire gestionnaire = _context.Gestionnaires.Where(g => g.UtilisateurId.Equals(GestionnaireId)).FirstOrDefault();
+            Gestionnaire gestionnaire = getGestionnaire(GestionnaireId);
 
             Support support = _context.Supports.Where(s => s.SupportId.Equals(SupportId)).FirstOrDefault();
 
